@@ -11,6 +11,7 @@ import Loans from './pages/Loans';
 import History from './pages/History';
 import Login from './pages/Login';
 import AddProductModal from './components/AddProductModal';
+import ReloadPrompt from './components/ReloadPrompt';
 import './App.css';
 
 // Componente para el menú de navegación inferior (para móviles) o lateral (escritorio)
@@ -222,6 +223,7 @@ export default function AppWrapper() {
             },
           },
         }} />
+        <ReloadPrompt />
         <App />
       </Router>
     </AuthProvider>
