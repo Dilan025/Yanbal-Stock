@@ -270,12 +270,12 @@ export default function Dashboard() {
                 </button>
                 {product.imageUrl ? (
                   <div 
-                    className="h-48 bg-cover bg-center cursor-pointer" 
+                    className="h-36 bg-contain bg-no-repeat bg-center cursor-pointer mt-4" 
                     onClick={() => setSelectedProduct(product)}
                     style={{ backgroundImage: `url(${product.imageUrl})` }}
                   />
                 ) : (
-                  <div className="h-48 bg-slate-100 flex items-center justify-center text-slate-300 cursor-pointer" onClick={() => setSelectedProduct(product)}>
+                  <div className="h-36 mt-4 bg-slate-100 flex items-center justify-center text-slate-300 cursor-pointer" onClick={() => setSelectedProduct(product)}>
                     <Package size={48} />
                   </div>
                 )}
@@ -297,24 +297,24 @@ export default function Dashboard() {
                   </p>
                 </div>
                 
-                <div className="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                   <motion.button 
                     whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50"
+                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50"
                     onClick={() => handleUpdateStock(product.id, product.stock, -1, product.name)}
                     disabled={product.stock === 0}
                   >
-                    <Minus size={18} />
+                    <Minus size={16} />
                   </motion.button>
                   
                   <span className="font-bold text-lg text-slate-700">{product.stock}</span>
                   
                   <motion.button 
                     whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
+                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
                     onClick={() => handleUpdateStock(product.id, product.stock, 1, product.name)}
                   >
-                    <Plus size={18} />
+                    <Plus size={16} />
                   </motion.button>
                 </div>
               </motion.div>
