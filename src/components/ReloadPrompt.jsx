@@ -27,7 +27,7 @@ function ReloadPrompt() {
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
-          className="fixed bottom-4 right-4 z-50 p-4 rounded-xl shadow-2xl bg-white dark:bg-slate-800 border-2 border-orange-500 max-w-sm w-[calc(100%-2rem)] flex flex-col gap-3"
+          className="fixed bottom-20 md:bottom-4 right-4 z-[60] p-4 rounded-xl shadow-2xl bg-white dark:bg-slate-800 border-2 border-orange-500 max-w-sm w-[calc(100%-2rem)] flex flex-col gap-3"
         >
           <div className="flex items-start justify-between">
             <div className="flex-1">
