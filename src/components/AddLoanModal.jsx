@@ -113,98 +113,98 @@ export default function AddLoanModal({ isOpen, onClose }) {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 md:p-8 relative my-8"
+            className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md p-6 md:p-8 relative my-8 transition-colors"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-slate-800 m-0">Nuevo Préstamo</h2>
-              <button onClick={onClose} className="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors">
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Nuevo Préstamo</h2>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full p-2 transition-colors">
                 <X size={20} />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-700 mb-1">
-              ¿A quién le prestas?
-            </label>
-            <input
-              type="text"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
-              placeholder="Ej: María, Directora Carmen..."
-              value={personName}
-              onChange={(e) => setPersonName(e.target.value)}
-              required
-            />
-          </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  ¿A quién le prestas?
+                </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm"
+                  placeholder="Ej: María, Directora Carmen..."
+                  value={personName}
+                  onChange={(e) => setPersonName(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-700 mb-1">
-              ¿Qué producto le prestas?
-            </label>
-            <select
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
-              value={productId}
-              onChange={(e) => setProductId(e.target.value)}
-              required
-            >
-              <option value="">Selecciona un producto disponible...</option>
-              {inventory.map(prod => (
-                <option key={prod.id} value={prod.id}>
-                  {prod.name} (Stock: {prod.stock})
-                </option>
-              ))}
-            </select>
-          </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  ¿Qué producto le prestas?
+                </label>
+                <select
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm"
+                  value={productId}
+                  onChange={(e) => setProductId(e.target.value)}
+                  required
+                >
+                  <option value="">Selecciona un producto disponible...</option>
+                  {inventory.map(prod => (
+                    <option key={prod.id} value={prod.id}>
+                      {prod.name} (Stock: {prod.stock})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-700 mb-1">
-              Cantidad
-            </label>
-            <input
-              type="number"
-              min="1"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              required
-            />
-          </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Cantidad
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-700 mb-1">
-              Notas (Opcional)
-            </label>
-            <textarea
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow resize-none"
-              placeholder="Ej: Devuelve el viernes, o lo paga en campaña 7"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows="2"
-            />
-          </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Notas (Opcional)
+                </label>
+                <textarea
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm resize-none"
+                  placeholder="Ej: Devuelve el viernes, o lo paga en campaña 7"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows="2"
+                />
+              </div>
 
-          <div className="flex gap-4 mt-2">
-            <button 
-              type="button" 
-              className="flex-1 py-3 px-4 border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold rounded-xl transition-colors"
-              onClick={onClose}
-              disabled={loading}
-            >
-              Cancelar
-            </button>
-            <button 
-              type="submit" 
-              className="flex-1 py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
-              disabled={loading}
-            >
-              {loading ? <Loader2 className="animate-spin" size={20} /> : 'Prestar Producto'}
-            </button>
-          </div>
-        </form>
-      </motion.div>
-    </div>
-    )}
-  </AnimatePresence>
+              <div className="flex gap-4 mt-2">
+                <button 
+                  type="button" 
+                  className="flex-1 py-3 px-4 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold rounded-xl transition-colors"
+                  onClick={onClose}
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="submit" 
+                  className="flex-1 py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
+                  disabled={loading}
+                >
+                  {loading ? <Loader2 className="animate-spin" size={20} /> : 'Prestar Producto'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }

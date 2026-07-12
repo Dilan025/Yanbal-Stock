@@ -39,8 +39,8 @@ export default function Loans() {
     
     toast((t) => (
       <div className="flex flex-col gap-3">
-        <span className="font-bold text-gray-800">¿Marcar como devuelto?</span>
-        <span className="text-sm text-gray-600">El stock regresará a tu inventario.</span>
+        <span className="font-bold text-gray-800 dark:text-white">¿Marcar como devuelto?</span>
+        <span className="text-sm text-gray-600 dark:text-gray-300">El stock regresará a tu inventario.</span>
         <div className="flex gap-2 mt-2">
           <button 
             className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-bold"
@@ -97,8 +97,8 @@ export default function Loans() {
     
     toast((t) => (
       <div className="flex flex-col gap-3">
-        <span className="font-bold text-gray-800">¿Eliminar registro?</span>
-        <span className="text-sm text-gray-600">Esto no afectará tu stock actual.</span>
+        <span className="font-bold text-gray-800 dark:text-white">¿Eliminar registro?</span>
+        <span className="text-sm text-gray-600 dark:text-gray-300">Esto no afectará tu stock actual.</span>
         <div className="flex gap-2 mt-2">
           <button 
             className="bg-red-500 text-white px-3 py-1 rounded-md text-sm font-bold"
@@ -141,10 +141,10 @@ export default function Loans() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto"
+      className="max-w-4xl mx-auto transition-colors"
     >
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-slate-800 m-0">Préstamos e Intercambios</h2>
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Préstamos e Intercambios</h2>
         <motion.button 
           whileTap={{ scale: 0.95 }}
           className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full font-medium transition-colors shadow-sm"
@@ -156,18 +156,18 @@ export default function Loans() {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-12 text-slate-500">
-          <Loader2 className="animate-spin mb-4 text-slate-300" size={32} />
+        <div className="flex flex-col items-center justify-center py-12 text-slate-500 dark:text-slate-400">
+          <Loader2 className="animate-spin mb-4 text-slate-300 dark:text-slate-600" size={32} />
           <span>Cargando registro...</span>
         </div>
       ) : loans.length === 0 ? (
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-slate-300 rounded-xl text-center"
+          className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-center"
         >
-          <ArrowRightLeft size={64} className="text-slate-300 mb-4" />
-          <h3 className="text-xl font-bold text-slate-700 mb-2">No hay préstamos activos</h3>
-          <p className="text-slate-500 max-w-md mx-auto">
+          <ArrowRightLeft size={64} className="text-slate-300 dark:text-slate-600 mb-4" />
+          <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">No hay préstamos activos</h3>
+          <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
             Aquí podrás llevar el control de los productos que le prestes a otras consultoras o los intercambios que realices.
           </p>
         </motion.div>
@@ -182,51 +182,51 @@ export default function Loans() {
                 exit={{ opacity: 0, x: 20 }}
                 whileHover={{ scale: 1.01 }}
                 key={loan.id} 
-                className={`bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6 border-l-4 ${loan.status === 'Pendiente' ? 'border-l-orange-500' : 'border-l-emerald-500'}`}
+                className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6 border-l-4 transition-colors ${loan.status === 'Pendiente' ? 'border-l-orange-500' : 'border-l-emerald-500'}`}
               >
                 
                 <div className="flex items-center gap-4 mb-4 md:mb-0">
                   {loan.productImage ? (
                     <div 
-                      className="w-16 h-16 rounded-lg bg-cover bg-center border border-slate-200 flex-shrink-0"
+                      className="w-16 h-16 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-600 flex-shrink-0"
                       style={{
                         backgroundImage: `url(${loan.productImage})`,
                       }}
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-xs text-slate-400 text-center flex-shrink-0">
+                    <div className="w-16 h-16 rounded-lg bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center text-xs text-slate-400 dark:text-slate-500 text-center flex-shrink-0">
                       Sin foto
                     </div>
                   )}
                   
                   <div>
-                    <h3 className="font-bold text-slate-800 text-lg mb-1">
+                    <h3 className="font-bold text-slate-800 dark:text-white text-lg mb-1">
                       <span className="text-orange-500 mr-1">{loan.quantity}x</span> {loan.productName}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 mb-1">
-                      <span>A: <strong className="text-slate-800">{loan.personName}</strong></span>
-                      <span className="flex items-center text-slate-500">
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 dark:text-slate-400 mb-1">
+                      <span>A: <strong className="text-slate-800 dark:text-slate-200">{loan.personName}</strong></span>
+                      <span className="flex items-center text-slate-500 dark:text-slate-400">
                         <Clock size={14} className="mr-1" /> 
                         {formatDate(loan.dateLent)}
                       </span>
                     </div>
                     {loan.notes && (
-                      <p className="text-sm italic text-slate-500">"{loan.notes}"</p>
+                      <p className="text-sm italic text-slate-500 dark:text-slate-400">"{loan.notes}"</p>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 md:pt-0 md:border-t-0 mt-2 md:mt-0">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-700 md:pt-0 md:border-t-0 mt-2 md:mt-0">
                   {loan.status === 'Pendiente' ? (
                     <motion.button 
                       whileTap={{ scale: 0.95 }}
-                      className="px-4 py-2 border border-orange-500 text-orange-500 rounded-lg text-sm font-bold hover:bg-orange-50 transition-colors"
+                      className="px-4 py-2 border border-orange-500 text-orange-500 rounded-lg text-sm font-bold hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors"
                       onClick={() => handleReturn(loan.id, loan.productId, loan.quantity)}
                     >
                       Marcar como Devuelto
                     </motion.button>
                   ) : (
-                    <div className="flex items-center gap-1 text-emerald-600 font-bold bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+                    <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
                       <Check size={18} />
                       <span>Devuelto</span>
                     </div>
@@ -234,7 +234,7 @@ export default function Loans() {
                   
                   <motion.button 
                     whileTap={{ scale: 0.9 }}
-                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     onClick={() => handleDelete(loan.id)}
                     title="Eliminar registro del historial"
                   >

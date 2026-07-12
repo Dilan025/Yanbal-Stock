@@ -7,19 +7,23 @@
     <title>Yanbal Stock</title>
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Anti-cache script to unregister stuck service workers -->
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          let hasUnregistered = false;
-          for(let registration of registrations) {
-            registration.unregister();
-            hasUnregistered = true;
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: { DEFAULT: '#f97316', hover: '#ea580c', light: '#fff7ed' }
+            }
           }
-          if (hasUnregistered) {
-            window.location.reload(true);
-          }
-        });
+        }
+      }
+      
+      // Prevent FOUC for dark mode
+      if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
       }
     </script>
   </head>

@@ -38,20 +38,20 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 w-full max-w-md text-center">
-        <div className="bg-orange-100 text-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 transition-colors">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-8 w-full max-w-md text-center transition-colors">
+        <div className="bg-orange-100 dark:bg-orange-900/50 text-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
           <Lock size={32} />
         </div>
         
-        <h1 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">Yanbal <span className="text-orange-500">Stock</span></h1>
-        <p className="text-slate-500 mb-8">
+        <h1 className="text-3xl font-black text-slate-800 dark:text-white mb-2 tracking-tight">Yanbal <span className="text-orange-500">Stock</span></h1>
+        <p className="text-slate-500 dark:text-slate-400 mb-8">
           {isLogin ? 'Inicia sesión para acceder a tu inventario.' : 'Crea una cuenta para tu nuevo inventario.'}
         </p>
         
         <form onSubmit={handleSubmit} className="text-left space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Correo Electrónico</label>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Correo Electrónico</label>
             <input
               type="email"
               value={email}
@@ -60,13 +60,13 @@ export default function Login() {
                 setError('');
               }}
               placeholder="ejemplo@correo.com"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Contraseña</label>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Contraseña</label>
             <input
               type="password"
               value={password}
@@ -75,13 +75,13 @@ export default function Login() {
                 setError('');
               }}
               placeholder="••••••••"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
               required
               minLength="6"
             />
           </div>
           
-          {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100">{error}</div>}
+          {error && <div className="p-3 bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg text-sm border border-red-100 dark:border-red-800">{error}</div>}
           
           <button 
             type="submit" 
@@ -93,8 +93,8 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-100">
-          <p className="text-slate-500 text-sm">
+        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
             {isLogin ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?'}
             <button 
               type="button"
