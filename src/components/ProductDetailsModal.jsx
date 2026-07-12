@@ -2,7 +2,7 @@ import React from 'react';
 import { X, Plus, Minus, Tag, Barcode } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ProductDetailsModal({ isOpen, onClose, product, onUpdateStock }) {
+export default function ProductDetailsModal({ isOpen, onClose, product, onUpdateStock, onEditClick }) {
   return (
     <AnimatePresence>
       {isOpen && product && (
@@ -104,12 +104,23 @@ export default function ProductDetailsModal({ isOpen, onClose, product, onUpdate
               </motion.button>
             </div>
 
-            <button 
-              className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors shadow-md text-lg" 
-              onClick={onClose}
-            >
-              Listo
-            </button>
+            <div className="flex gap-3">
+              <button 
+                className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-bold rounded-xl transition-colors shadow-sm text-lg" 
+                onClick={() => {
+                  if (onEditClick) onEditClick(product);
+                  onClose();
+                }}
+              >
+                Editar
+              </button>
+              <button 
+                className="flex-[2] py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors shadow-md text-lg" 
+                onClick={onClose}
+              >
+                Listo
+              </button>
+            </div>
           </motion.div>
         </div>
       )}

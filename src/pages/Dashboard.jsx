@@ -4,6 +4,7 @@ import { collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } fro
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import ProductDetailsModal from '../components/ProductDetailsModal';
+import AddProductModal from '../components/AddProductModal';
 import { logHistory } from '../utils/history';
 import { exportToCSV } from '../utils/exportData';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,6 +22,7 @@ export default function Dashboard() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -387,6 +389,13 @@ export default function Dashboard() {
         onClose={() => setSelectedProduct(null)} 
         product={selectedProduct}
         onUpdateStock={handleUpdateStock}
+        onEditClick={(product) => setEditingProduct(product)}
+      />
+      
+      <AddProductModal 
+        isOpen={!!editingProduct} 
+        onClose={() => setEditingProduct(null)} 
+        productToEdit={editingProduct} 
       />
     </motion.div>
   );

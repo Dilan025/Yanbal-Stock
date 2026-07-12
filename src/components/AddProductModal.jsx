@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Upload, Loader2, Search, Camera, ScanLine } from 'lucide-react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import catalog from '../data/catalog.json';
 import { logHistory } from '../utils/history';
@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
-export default function AddProductModal({ isOpen, onClose }) {
+export default function AddProductModal({ isOpen, onClose, productToEdit = null }) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Maquillaje');
   const [stock, setStock] = useState(1);
@@ -25,7 +25,31 @@ export default function AddProductModal({ isOpen, onClose }) {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    if (name.trim() === '') {
+    if (isOpen) {
+      if (productToEdit) {
+        setName(productToEdit.name || '');
+        setCategory(productToEdit.category || 'Maquillaje');
+        setStock(productToEdit.stock || 0);
+        setPrice(productToEdit.price || '');
+        setBarcode(productToEdit.barcode || '');
+        setCampaign(productToEdit.campaign || '');
+        setVariant(productToEdit.variant || '');
+        setImageBase64(productToEdit.imageUrl || '');
+      } else {
+        setName('');
+        setCategory('Maquillaje');
+        setStock(1);
+        setPrice('');
+        setBarcode('');
+        setCampaign('');
+        setVariant('');
+        setImageBase64('');
+      }
+    }
+  }, [isOpen, productToEdit]);
+
+  useEffect(() => {
+    if (name.trim() === '' || productToEdit) {
       setSuggestions([]);
       return;
     }
@@ -33,7 +57,7 @@ export default function AddProductModal({ isOpen, onClose }) {
       p.name.toLowerCase().includes(name.toLowerCase())
     );
     setSuggestions(filtered);
-  }, [name]);
+  }, [name, productToEdit]);
 
   useEffect(() => {
     let scanner;
@@ -115,7 +139,7 @@ export default function AddProductModal({ isOpen, onClose }) {
 
     setIsLoading(true);
     try {
-      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'products'), {
+      const productData = {
         name,
         category,
         stock: parseInt(stock, 10),
@@ -124,27 +148,34 @@ export default function AddProductModal({ isOpen, onClose }) {
         campaign,
         variant,
         imageUrl: imageBase64,
-        createdAt: serverTimestamp()
-      });
-      
-      await logHistory(currentUser.uid, {
-        action: 'ADD_PRODUCT',
-        productId: docRef.id,
-        productName: name,
-        quantity: parseInt(stock, 10),
-        details: `Nuevo producto agregado (Stock: ${stock})`
-      });
+      };
 
-      setName('');
-      setCategory('Maquillaje');
-      setStock(1);
-      setPrice('');
-      setBarcode('');
-      setCampaign('');
-      setVariant('');
-      setImageBase64('');
-      setIsScanning(false);
-      toast.success('Producto agregado con éxito');
+      if (productToEdit) {
+        const productRef = doc(db, 'users', currentUser.uid, 'products', productToEdit.id);
+        await updateDoc(productRef, productData);
+        
+        await logHistory(currentUser.uid, {
+          action: 'EDIT_PRODUCT',
+          productId: productToEdit.id,
+          productName: name,
+          quantity: parseInt(stock, 10),
+          details: `Producto actualizado`
+        });
+        toast.success('Producto actualizado con éxito');
+      } else {
+        productData.createdAt = serverTimestamp();
+        const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'products'), productData);
+        
+        await logHistory(currentUser.uid, {
+          action: 'ADD_PRODUCT',
+          productId: docRef.id,
+          productName: name,
+          quantity: parseInt(stock, 10),
+          details: `Nuevo producto agregado (Stock: ${stock})`
+        });
+        toast.success('Producto agregado con éxito');
+      }
+
       onClose();
     } catch (error) {
       console.error("Error al guardar:", error);
@@ -166,7 +197,9 @@ export default function AddProductModal({ isOpen, onClose }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Nuevo Producto</h2>
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">
+                {productToEdit ? 'Editar Producto' : 'Nuevo Producto'}
+              </h2>
               <button onClick={() => { setIsScanning(false); onClose(); }} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full p-2 transition-colors">
                 <X size={20} />
               </button>
@@ -336,7 +369,7 @@ export default function AddProductModal({ isOpen, onClose }) {
                 className="mt-2 w-full py-3.5 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 shadow-md text-lg"
                 disabled={isLoading}
               >
-                {isLoading ? <Loader2 className="animate-spin" size={20} /> : 'Guardar Producto'}
+                {isLoading ? <Loader2 className="animate-spin" size={20} /> : (productToEdit ? 'Guardar Cambios' : 'Guardar Producto')}
               </button>
             </form>
           </motion.div>
