@@ -1,0 +1,22 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgNPUr-yRtR3r8qu9ipnG3809tU_b9mLI",
+  authDomain: "yanbal-inventory.firebaseapp.com",
+  projectId: "yanbal-inventory",
+  storageBucket: "yanbal-inventory.firebasestorage.app",
+  messagingSenderId: "450787023201",
+  appId: "1:450787023201:web:e8a5bafee8db6a67104d20",
+  measurementId: "G-699CF9QQ96"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and Cloud Storage and Auth
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const auth = getAuth(app);
