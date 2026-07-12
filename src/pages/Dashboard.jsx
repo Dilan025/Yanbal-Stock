@@ -345,7 +345,12 @@ export default function Dashboard() {
                       )}
                     </div>
                     <h3 className="font-bold text-slate-800 dark:text-white text-lg mb-1 leading-tight">{product.name}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                    {product.variant && (
+                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
+                        Tono: {product.variant}
+                      </p>
+                    )}
+                    <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-2">
                       Stock: <strong className={`text-xl ${product.stock === 0 ? 'text-red-500' : isLowStock ? 'text-amber-500' : 'text-slate-700 dark:text-slate-200'}`}>{product.stock}</strong>
                     </p>
                   </div>

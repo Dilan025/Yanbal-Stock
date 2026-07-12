@@ -16,6 +16,7 @@ export default function AddProductModal({ isOpen, onClose }) {
   const [price, setPrice] = useState('');
   const [barcode, setBarcode] = useState('');
   const [campaign, setCampaign] = useState('');
+  const [variant, setVariant] = useState('');
   const [imageBase64, setImageBase64] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -121,6 +122,7 @@ export default function AddProductModal({ isOpen, onClose }) {
         price: parseFloat(price) || 0,
         barcode,
         campaign,
+        variant,
         imageUrl: imageBase64,
         createdAt: serverTimestamp()
       });
@@ -139,6 +141,7 @@ export default function AddProductModal({ isOpen, onClose }) {
       setPrice('');
       setBarcode('');
       setCampaign('');
+      setVariant('');
       setImageBase64('');
       setIsScanning(false);
       toast.success('Producto agregado con éxito');
@@ -303,6 +306,17 @@ export default function AddProductModal({ isOpen, onClose }) {
                       <ScanLine size={20} />
                     </button>
                   </div>
+                </div>
+
+                <div className="flex-[1.5] flex flex-col">
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tono / Variante</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    placeholder="Ej. Rojo Pasión (Opcional)"
+                    value={variant}
+                    onChange={(e) => setVariant(e.target.value)}
+                  />
                 </div>
 
                 <div className="flex-1 flex flex-col">

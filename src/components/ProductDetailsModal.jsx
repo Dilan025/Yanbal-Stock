@@ -46,8 +46,14 @@ export default function ProductDetailsModal({ isOpen, onClose, product, onUpdate
                 <strong className="text-slate-800 dark:text-white text-lg">{product.stock}</strong> unidades
               </div>
 
-              {(product.campaign || product.barcode) && (
-                <div className="flex justify-center gap-4 mt-2">
+              {(product.campaign || product.barcode || product.variant) && (
+                <div className="flex justify-center flex-wrap gap-4 mt-2">
+                  {product.variant && (
+                    <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">
+                      <Tag size={12} />
+                      Tono: {product.variant}
+                    </div>
+                  )}
                   {product.campaign && (
                     <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">
                       <Tag size={12} />
