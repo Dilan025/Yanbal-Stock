@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Lock, LogIn, UserPlus, Loader2 } from 'lucide-react';
 import { auth } from '../firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { toast } from 'react-hot-toast';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,6 +10,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +38,32 @@ export default function Login() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      setError('Por favor, ingresa tu correo electrónico primero para enviarte el enlace de recuperación.');
+      return;
+    }
+    
+    setResetLoading(true);
+    setError('');
+    
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast.success('Se ha enviado un enlace de recuperación a tu correo.');
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/user-not-found') {
+        setError('No hay ninguna cuenta registrada con este correo.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('El correo ingresado no es válido.');
+      } else {
+        setError('No se pudo enviar el correo de recuperación. Inténtalo de nuevo.');
+      }
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -68,7 +96,19 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Contraseña</label>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-slate-600 dark:text-slate-300">Contraseña</label>
+              {isLogin && (
+                <button
+                  type="button"
+                  onClick={handleResetPassword}
+                  disabled={resetLoading}
+                  className="text-xs font-bold text-orange-500 hover:text-orange-600 hover:underline disabled:opacity-50"
+                >
+                  {resetLoading ? 'Enviando...' : '¿Olvidaste tu contraseña?'}
+                </button>
+              )}
+            </div>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
