@@ -126,53 +126,52 @@ export default function AddProductModal({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto" onClick={onClose}>
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="modal-content card" 
-            style={{ overflow: 'visible', padding: '2rem' }}
+            className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 md:p-8 relative my-8" 
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2 className="modal-title" style={{ margin: 0, textAlign: 'left' }}>Nuevo Producto</h2>
-              <button onClick={onClose} className="modal-close-btn">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-slate-800 m-0">Nuevo Producto</h2>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors">
                 <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           
-          <div className="image-upload-container text-center">
+          <div className="text-center">
             <input 
               type="file" 
               id="productImage" 
-              style={{ display: 'none' }}
+              className="hidden"
               accept="image/*"
               onChange={handleImageChange}
             />
             <label 
               htmlFor="productImage" 
-              className={`image-upload-box ${imageBase64 ? 'has-image' : ''}`}
+              className={`block w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors ${imageBase64 ? 'border-transparent bg-slate-50' : 'border-slate-300 hover:border-orange-400 bg-slate-50 hover:bg-orange-50'}`}
               style={imageBase64 ? { backgroundImage: `url(${imageBase64})`, backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' } : {}}
             >
               {!imageBase64 && (
-                <div className="upload-placeholder">
-                  <Upload size={32} style={{ margin: '0 auto 0.5rem', color: '#9CA3AF' }} />
-                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>Toca para subir foto</span>
+                <div className="flex flex-col items-center justify-center text-slate-500">
+                  <Upload size={32} className="mb-2 text-slate-400" />
+                  <span className="text-sm font-medium">Toca para subir foto</span>
                 </div>
               )}
             </label>
           </div>
 
-          <div className="input-group relative">
-            <label className="input-label">Buscar producto en el catálogo</label>
-            <div className="search-bar">
-              <Search className="search-icon" size={18} />
+          <div className="relative flex flex-col">
+            <label className="text-sm font-medium text-slate-700 mb-1">Buscar producto en el catálogo</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
                 type="text"
-                className="search-input"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
                 placeholder="Empieza a escribir... (Ej. Ohm)"
                 value={name}
                 onChange={(e) => {
@@ -185,19 +184,17 @@ export default function AddProductModal({ isOpen, onClose }) {
             </div>
             
             {showSuggestions && suggestions.length > 0 && (
-              <ul style={{ position: 'absolute', zIndex: 50, width: '100%', backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', marginTop: '4px', maxHeight: '240px', overflowY: 'auto', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)', top: '100%', left: 0, listStyle: 'none', padding: 0, margin: '4px 0 0 0' }}>
+              <ul className="absolute z-50 w-full bg-white border border-slate-200 rounded-lg mt-1 max-h-60 overflow-y-auto shadow-lg top-full left-0 list-none p-0">
                 {suggestions.map((p, index) => (
                   <li 
                     key={index}
-                    style={{ padding: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #f3f4f6', backgroundColor: '#fff', transition: 'background-color 0.2s' }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fff7ed'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}
+                    className="p-3 cursor-pointer flex items-center gap-3 border-b border-slate-50 hover:bg-orange-50 transition-colors"
                     onClick={() => handleSelectProduct(p)}
                   >
-                    {p.imageUrl && <img src={p.imageUrl} alt={p.name} style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '4px' }} />}
+                    {p.imageUrl && <img src={p.imageUrl} alt={p.name} className="w-10 h-10 object-contain rounded" />}
                     <div>
-                      <div style={{ fontWeight: 500, fontSize: '14px', color: '#1f2937' }}>{p.name}</div>
-                      <div style={{ fontSize: '12px', color: '#f97316' }}>{p.category}</div>
+                      <div className="font-medium text-sm text-slate-800">{p.name}</div>
+                      <div className="text-xs text-orange-500">{p.category}</div>
                     </div>
                   </li>
                 ))}
@@ -205,11 +202,11 @@ export default function AddProductModal({ isOpen, onClose }) {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <div className="input-group" style={{ flex: 1 }}>
-              <label className="input-label">Categoría</label>
+          <div className="flex gap-4">
+            <div className="flex-1 flex flex-col">
+              <label className="text-sm font-medium text-slate-700 mb-1">Categoría</label>
               <select 
-                className="input-field"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
@@ -224,13 +221,12 @@ export default function AddProductModal({ isOpen, onClose }) {
               </select>
             </div>
             
-            <div className="input-group" style={{ width: '100px' }}>
-              <label className="input-label">Precio (S/)</label>
+            <div className="w-24 flex flex-col">
+              <label className="text-sm font-medium text-slate-700 mb-1">Precio (S/)</label>
               <input
                 type="number"
                 step="0.01"
-                className="input-field"
-                style={{ textAlign: 'center' }}
+                className="w-full px-2 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 text-center"
                 placeholder="0.00"
                 min="0"
                 value={price}
@@ -238,12 +234,11 @@ export default function AddProductModal({ isOpen, onClose }) {
               />
             </div>
             
-            <div className="input-group" style={{ width: '100px' }}>
-              <label className="input-label">Stock</label>
+            <div className="w-20 flex flex-col">
+              <label className="text-sm font-medium text-slate-700 mb-1">Stock</label>
               <input
                 type="number"
-                className="input-field"
-                style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.125rem' }}
+                className="w-full px-2 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 text-center font-bold text-lg"
                 min="0"
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
@@ -254,8 +249,7 @@ export default function AddProductModal({ isOpen, onClose }) {
 
           <button 
             type="submit" 
-            className="btn btn-primary"
-            style={{ marginTop: '1rem', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}
+            className="mt-4 w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
             disabled={isLoading}
           >
             {isLoading ? <Loader2 className="animate-spin" size={20} /> : 'Guardar Producto (Stock: ' + stock + ')'}

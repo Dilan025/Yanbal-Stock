@@ -108,30 +108,29 @@ export default function AddLoanModal({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto" onClick={onClose}>
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="modal-content card"
-            style={{ padding: '2rem' }}
+            className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 md:p-8 relative my-8"
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2 className="modal-title" style={{ margin: 0, textAlign: 'left' }}>Nuevo Préstamo</h2>
-              <button onClick={onClose} className="modal-close-btn">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-slate-800 m-0">Nuevo Préstamo</h2>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors">
                 <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div>
-            <label className="input-label">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-slate-700 mb-1">
               ¿A quién le prestas?
             </label>
             <input
               type="text"
-              className="input-field"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
               placeholder="Ej: María, Directora Carmen..."
               value={personName}
               onChange={(e) => setPersonName(e.target.value)}
@@ -139,12 +138,12 @@ export default function AddLoanModal({ isOpen, onClose }) {
             />
           </div>
 
-          <div>
-            <label className="input-label">
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-slate-700 mb-1">
               ¿Qué producto le prestas?
             </label>
             <select
-              className="input-field"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
               required
@@ -158,27 +157,26 @@ export default function AddLoanModal({ isOpen, onClose }) {
             </select>
           </div>
 
-          <div>
-            <label className="input-label">
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-slate-700 mb-1">
               Cantidad
             </label>
             <input
               type="number"
               min="1"
-              className="input-field"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               required
             />
           </div>
 
-          <div>
-            <label className="input-label">
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-slate-700 mb-1">
               Notas (Opcional)
             </label>
             <textarea
-              className="input-field"
-              style={{ resize: 'none' }}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow resize-none"
               placeholder="Ej: Devuelve el viernes, o lo paga en campaña 7"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -186,11 +184,10 @@ export default function AddLoanModal({ isOpen, onClose }) {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+          <div className="flex gap-4 mt-2">
             <button 
               type="button" 
-              className="btn btn-outline"
-              style={{ flex: 1 }}
+              className="flex-1 py-3 px-4 border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold rounded-xl transition-colors"
               onClick={onClose}
               disabled={loading}
             >
@@ -198,8 +195,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
             </button>
             <button 
               type="submit" 
-              className="btn btn-primary"
-              style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+              className="flex-1 py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
               disabled={loading}
             >
               {loading ? <Loader2 className="animate-spin" size={20} /> : 'Prestar Producto'}

@@ -18,27 +18,27 @@ function Navigation() {
   const location = useLocation();
   
   return (
-    <nav className="bottom-nav">
+    <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around p-2 md:hidden z-50">
       <Link 
         to="/" 
-        className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/' ? 'text-orange-500' : 'text-slate-500'}`}
       >
         <Package size={24} />
-        <span>Inventario</span>
+        <span className="text-xs font-medium mt-1">Inventario</span>
       </Link>
       <Link 
         to="/loans" 
-        className={`nav-item ${location.pathname === '/loans' ? 'active' : ''}`}
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/loans' ? 'text-orange-500' : 'text-slate-500'}`}
       >
         <Repeat size={24} />
-        <span>Préstamos</span>
+        <span className="text-xs font-medium mt-1">Préstamos</span>
       </Link>
       <Link 
         to="/history" 
-        className={`nav-item ${location.pathname === '/history' ? 'active' : ''}`}
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/history' ? 'text-orange-500' : 'text-slate-500'}`}
       >
         <Activity size={24} />
-        <span>Historial</span>
+        <span className="text-xs font-medium mt-1">Historial</span>
       </Link>
     </nav>
   );
@@ -80,44 +80,44 @@ function App() {
   }
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <div className="container app-header-content">
-          <div className="brand-container">
-            <img src="/yanbal-logo.svg" alt="Yanbal" className="brand-logo" onError={(e) => { e.target.style.display='none' }}/>
-            <div className="brand-title">Yanbal <span>Stock</span></div>
+    <div className="min-h-screen bg-gray-50 pb-16 md:pb-0 flex flex-col">
+      <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
+          <div className="flex items-center gap-2">
+            <img src="/yanbal-logo.svg" alt="Yanbal" className="h-8" onError={(e) => { e.target.style.display='none' }}/>
+            <div className="text-xl font-bold text-slate-800">Yanbal <span className="text-orange-500">Stock</span></div>
           </div>
           
           {/* Navegación para Escritorio */}
-          <nav className="desktop-nav">
+          <nav className="hidden md:flex items-center gap-6">
             <Link 
               to="/" 
-              className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/' ? 'bg-slate-100 text-orange-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
             >
               <Package size={20} />
               <span>Inventario</span>
             </Link>
             <Link 
               to="/loans" 
-              className={`nav-link ${location.pathname === '/loans' ? 'active' : ''}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/loans' ? 'bg-slate-100 text-orange-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
             >
               <Repeat size={20} />
               <span>Préstamos</span>
             </Link>
             <Link 
               to="/history" 
-              className={`nav-link ${location.pathname === '/history' ? 'active' : ''}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/history' ? 'bg-slate-100 text-orange-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
             >
               <Activity size={20} />
               <span>Historial</span>
             </Link>
           </nav>
 
-          <div className="header-actions">
+          <div className="flex items-center gap-4">
             
             {/* Nombre de la Cuenta */}
             <div 
-              className="account-badge"
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full cursor-pointer hover:bg-slate-200 transition-colors"
               title="Cambiar Nombre de Cuenta"
               onClick={async () => {
                 const newName = prompt("¿Cuál es el nombre de la Consultora/Dueño de la cuenta?", accountName);
@@ -137,24 +137,24 @@ function App() {
             </div>
 
             <button 
-              className="btn btn-ghost btn-icon"
+              className="p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 rounded-full transition-colors"
               title="Cerrar Sesión"
               onClick={handleLogout}
             >
               <LogOut size={20} />
             </button>
             <button 
-              className="btn btn-primary"
+              className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full font-medium transition-colors shadow-sm"
               onClick={() => setIsModalOpen(true)}
             >
               <PlusCircle size={20} />
-              <span className="hide-mobile">Nuevo Producto</span>
+              <span className="hidden sm:inline">Nuevo Producto</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="main-content">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/loans" element={<Loans />} />

@@ -93,32 +93,30 @@ export default function History() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="container"
-      style={{ position: 'relative' }}
+      className="max-w-4xl mx-auto"
     >
-      <div className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.875rem', fontWeight: 800, color: 'var(--color-text)', margin: 0, letterSpacing: '-0.025em' }}>Historial de Movimientos</h2>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold text-slate-800 m-0">Historial de Movimientos</h2>
         <motion.div 
           whileHover={{ scale: 1.05 }}
-          className="badge badge-primary"
-          style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}
+          className="bg-orange-100 text-orange-800 px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm border border-orange-200"
         >
           Últimos {history.length}
         </motion.div>
       </div>
 
-      <div className="card" style={{ padding: '2rem' }}>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Activity className="animate-pulse" size={48} style={{ marginBottom: '1rem', color: '#D1D5DB' }} />
+          <div className="flex flex-col items-center justify-center py-12 text-slate-500">
+            <Activity className="animate-pulse mb-4 text-slate-300" size={48} />
             <p>Cargando historial...</p>
           </div>
         ) : history.length === 0 ? (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--color-text-muted)' }}
+            className="flex flex-col items-center justify-center py-12 text-slate-500"
           >
-            <Activity size={48} style={{ margin: '0 auto 1rem', color: '#D1D5DB' }} />
+            <Activity size={48} className="mb-4 text-slate-300" />
             <p>Aún no hay movimientos registrados.</p>
           </motion.div>
         ) : (
@@ -126,37 +124,37 @@ export default function History() {
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="timeline-list"
+            className="flex flex-col"
           >
             {history.map((item, index) => (
               <motion.div 
                 variants={itemVariants}
                 whileHover={{ scale: 1.01, x: 5 }}
                 key={item.id} 
-                className="timeline-item group"
+                className="flex group relative pb-6"
               >
                 
                 {/* Columna Izquierda: Icono y Línea */}
-                <div className="timeline-left">
-                  <div className={`timeline-icon-container shadow-sm group-hover:shadow-md transition-shadow ${getActionColor(item.action)}`}>
+                <div className="flex flex-col items-center mr-6">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center z-10 shadow-sm group-hover:shadow-md transition-shadow bg-white border border-slate-200 ${item.action.includes('ADD') || item.action.includes('UP') ? 'text-emerald-500' : item.action.includes('DOWN') ? 'text-red-500' : item.action.includes('LOAN') ? 'text-blue-500' : 'text-slate-500'}`}>
                     {getActionIcon(item.action)}
                   </div>
                   {index !== history.length - 1 && (
-                    <div className="timeline-line group-hover:bg-gray-300 transition-colors"></div>
+                    <div className="w-px h-full bg-slate-200 absolute top-10 left-5 group-hover:bg-slate-300 transition-colors"></div>
                   )}
                 </div>
                 
                 {/* Columna Derecha: Tarjeta de Contenido */}
-                <div className="timeline-right">
-                  <div className="timeline-card group-hover:border-gray-300 transition-colors shadow-sm">
-                    <div className="timeline-header flex-wrap gap-2">
-                      <div className="font-extrabold text-gray-800 text-lg">{item.productName}</div>
-                      <time className="timeline-time bg-gray-50 px-2 py-1 rounded-md border border-gray-100">
+                <div className="flex-1">
+                  <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl group-hover:border-slate-300 transition-colors shadow-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <div className="font-bold text-slate-800 text-lg">{item.productName}</div>
+                      <time className="flex items-center text-xs text-slate-500 bg-white px-2 py-1 rounded border border-slate-200 font-medium">
                         <Clock size={12} className="mr-1" />
                         {formatDate(item.timestamp)}
                       </time>
                     </div>
-                    <div className="text-sm text-gray-600 mt-2">
+                    <div className="text-sm text-slate-600">
                       {item.details}
                     </div>
                   </div>

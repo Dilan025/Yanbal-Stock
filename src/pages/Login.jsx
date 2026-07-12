@@ -38,20 +38,20 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="card login-card">
-        <div className="center-content" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)', width: '4rem', height: '4rem', borderRadius: 'var(--radius-full)', margin: '0 auto 1.5rem auto' }}>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 w-full max-w-md text-center">
+        <div className="bg-orange-100 text-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
           <Lock size={32} />
         </div>
         
-        <h1 className="login-title">Yanbal Stock</h1>
-        <p className="login-subtitle">
+        <h1 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">Yanbal <span className="text-orange-500">Stock</span></h1>
+        <p className="text-slate-500 mb-8">
           {isLogin ? 'Inicia sesión para acceder a tu inventario.' : 'Crea una cuenta para tu nuevo inventario.'}
         </p>
         
-        <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Correo Electrónico</label>
+        <form onSubmit={handleSubmit} className="text-left space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Correo Electrónico</label>
             <input
               type="email"
               value={email}
@@ -60,14 +60,13 @@ export default function Login() {
                 setError('');
               }}
               placeholder="ejemplo@correo.com"
-              className="input-field"
-              style={{ width: '100%', padding: '0.5rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
               required
             />
           </div>
 
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Contraseña</label>
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Contraseña</label>
             <input
               type="password"
               value={password}
@@ -76,19 +75,17 @@ export default function Login() {
                 setError('');
               }}
               placeholder="••••••••"
-              className="input-field"
-              style={{ width: '100%', padding: '0.5rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow"
               required
               minLength="6"
             />
           </div>
           
-          {error && <div className="login-error">{error}</div>}
+          {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100">{error}</div>}
           
           <button 
             type="submit" 
-            className="btn btn-primary"
-            style={{ width: '100%', padding: '0.75rem', fontSize: '1.125rem', display: 'flex', justifyContent: 'center', gap: '0.5rem', borderRadius: 'var(--radius-md)' }}
+            className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm mt-6"
             disabled={loading}
           >
             {loading ? <Loader2 className="animate-spin" size={20} /> : (isLogin ? <LogIn size={20} /> : <UserPlus size={20} />)}
@@ -96,12 +93,12 @@ export default function Login() {
           </button>
         </form>
 
-        <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+        <div className="mt-8 pt-6 border-t border-slate-100">
+          <p className="text-slate-500 text-sm">
             {isLogin ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?'}
             <button 
               type="button"
-              style={{ marginLeft: '0.5rem', color: 'var(--color-primary)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+              className="ml-1 text-orange-500 font-bold hover:underline bg-transparent border-none cursor-pointer"
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError('');

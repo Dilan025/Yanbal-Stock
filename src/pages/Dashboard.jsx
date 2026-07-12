@@ -145,20 +145,20 @@ export default function Dashboard() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="page-container container"
+      className="max-w-7xl mx-auto"
     >
-      <div className="page-header">
-        <h2 className="page-title">Mi Inventario</h2>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        <h2 className="text-2xl font-bold text-slate-800">Mi Inventario</h2>
+        <div className="flex flex-wrap items-center gap-3">
           <motion.div 
             whileHover={{ scale: 1.05 }}
-            className="badge badge-success shadow-sm"
+            className="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm"
           >
             Capital: S/ {totalValue.toFixed(2)}
           </motion.div>
           <motion.div 
             whileHover={{ scale: 1.05 }}
-            className="badge badge-warning shadow-sm"
+            className="bg-amber-100 text-amber-800 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm"
           >
             Productos: {products.length}
           </motion.div>
@@ -167,8 +167,7 @@ export default function Dashboard() {
               exportToCSV(products);
               toast.success('Excel descargado');
             }}
-            className="btn btn-outline"
-            style={{ padding: '0.5rem', borderColor: 'var(--color-border)' }}
+            className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
             title="Exportar a Excel"
           >
             <Download size={20} />
@@ -180,15 +179,14 @@ export default function Dashboard() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="card"
-          style={{ padding: '1.5rem', marginBottom: '2rem', display: 'flex', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'center' }}
+          className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 flex flex-wrap gap-6 items-center"
         >
-          <div style={{ flex: '1 1 250px' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-secondary)', marginBottom: '0.5rem' }}>Resumen de Inversión</h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>Valor total distribuido por categorías en tiempo real.</p>
-            <div style={{ fontSize: '2.25rem', fontWeight: 800, color: 'var(--color-primary)' }}>S/ {totalValue.toFixed(2)}</div>
+          <div className="flex-1 min-w-[250px]">
+            <h3 className="text-lg font-bold text-slate-700 mb-2">Resumen de Inversión</h3>
+            <p className="text-sm text-slate-500 mb-4">Valor total distribuido por categorías en tiempo real.</p>
+            <div className="text-3xl font-bold text-orange-500">S/ {totalValue.toFixed(2)}</div>
           </div>
-          <div style={{ flex: '2 1 300px', height: '250px' }}>
+          <div className="flex-[2] min-w-[300px] h-[250px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -212,38 +210,25 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      <div className="search-section">
-        <div className="search-bar">
-          <Search className="search-icon" size={20} />
-          <input
-            type="text"
-            placeholder="Buscar por nombre o categoría..."
-            className="search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <div className="mb-6 relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search className="text-slate-400" size={20} />
         </div>
+        <input
+          type="text"
+          placeholder="Buscar por nombre o categoría..."
+          className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
-      <div className="category-filters">
+      <div className="flex overflow-x-auto pb-4 mb-2 gap-2 hide-scrollbar">
         {categories.map(cat => (
           <button 
             key={cat}
             onClick={() => setCategoryFilter(cat)}
-            className={`filter-btn ${categoryFilter === cat ? 'active' : ''}`}
-            style={{
-              padding: '0.5rem 1.25rem',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.875rem',
-              fontWeight: 700,
-              whiteSpace: 'nowrap',
-              transition: 'all var(--transition-fast)',
-              boxShadow: 'var(--shadow-sm)',
-              border: categoryFilter === cat ? 'none' : '1px solid var(--color-border)',
-              background: categoryFilter === cat ? 'var(--color-primary)' : 'white',
-              color: categoryFilter === cat ? 'white' : 'var(--color-text-muted)',
-              transform: categoryFilter === cat ? 'scale(1.05)' : 'none'
-            }}
+            className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm ${categoryFilter === cat ? 'bg-orange-500 text-white scale-105 border-transparent' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}
           >
             {cat}
           </button>
@@ -251,21 +236,20 @@ export default function Dashboard() {
       </div>
 
       {loading ? (
-        <div className="center-content" style={{ padding: '3rem 0', color: 'var(--color-text-muted)' }}>
-          <Loader2 className="animate-spin" size={24} style={{ marginBottom: '0.5rem' }} />
+        <div className="flex flex-col items-center justify-center py-12 text-slate-500">
+          <Loader2 className="animate-spin mb-2" size={24} />
           <span>Cargando inventario...</span>
         </div>
       ) : filteredProducts.length === 0 ? (
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          className="card center-content"
-          style={{ padding: '3rem', border: '2px dashed var(--color-border)', backgroundColor: 'transparent', boxShadow: 'none' }}
+          className="flex flex-col items-center justify-center py-12 border-2 border-dashed border-slate-300 rounded-xl"
         >
-          <Package size={64} style={{ color: 'var(--color-border)', marginBottom: '1rem' }} />
-          <p style={{ fontSize: '1.125rem', color: 'var(--color-text-muted)' }}>No se encontraron productos.</p>
+          <Package size={64} className="text-slate-300 mb-4" />
+          <p className="text-lg text-slate-500">No se encontraron productos.</p>
         </motion.div>
       ) : (
-        <motion.div layout className="products-grid">
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {filteredProducts.map((product) => (
               <motion.div 
@@ -275,59 +259,59 @@ export default function Dashboard() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 whileHover={{ y: -5 }}
                 key={product.id} 
-                className="card product-card group"
+                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col relative group"
               >
                 <button 
                   onClick={() => handleDeleteProduct(product.id, product.name, product.stock)}
-                  className="delete-btn"
+                  className="absolute top-2 right-2 bg-white/80 hover:bg-red-500 hover:text-white text-slate-400 p-1.5 rounded-full transition-colors z-10 opacity-0 group-hover:opacity-100"
                   title="Eliminar producto"
                 >
                   <Trash2 size={16} />
                 </button>
                 {product.imageUrl ? (
                   <div 
-                    className="product-card-image" 
+                    className="h-48 bg-cover bg-center cursor-pointer" 
                     onClick={() => setSelectedProduct(product)}
-                    style={{ backgroundImage: `url(${product.imageUrl})`, cursor: 'pointer' }}
+                    style={{ backgroundImage: `url(${product.imageUrl})` }}
                   />
                 ) : (
-                  <div className="product-card-placeholder" onClick={() => setSelectedProduct(product)} style={{ cursor: 'pointer' }}>
+                  <div className="h-48 bg-slate-100 flex items-center justify-center text-slate-300 cursor-pointer" onClick={() => setSelectedProduct(product)}>
                     <Package size={48} />
                   </div>
                 )}
                 
-                <div style={{ flex: 1, cursor: 'pointer' }} onClick={() => setSelectedProduct(product)}>
-                  <div className="product-card-header">
-                    <span className={`badge ${product.stock > 0 ? 'badge-success' : 'badge-danger'} shadow-sm`}>
+                <div className="p-4 flex-1 cursor-pointer" onClick={() => setSelectedProduct(product)}>
+                  <div className="flex justify-between items-start mb-2">
+                    <span className={`px-2 py-1 text-xs font-bold rounded-full ${product.stock > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
                       {product.category}
                     </span>
                     {product.price > 0 && (
-                      <span className="product-card-price">
+                      <span className="font-bold text-slate-700">
                         S/ {product.price.toFixed(2)}
                       </span>
                     )}
                   </div>
-                  <h3 className="product-card-title">{product.name}</h3>
-                  <p className="product-card-stock">
-                    Stock disponible: <strong style={{ color: product.stock === 0 ? '#EF4444' : 'var(--color-secondary)', fontSize: '1.25rem', marginLeft: '0.25rem' }}>{product.stock}</strong>
+                  <h3 className="font-bold text-slate-800 text-lg mb-1 leading-tight">{product.name}</h3>
+                  <p className="text-sm text-slate-500 flex items-center gap-1">
+                    Stock disponible: <strong className={`text-xl ${product.stock === 0 ? 'text-red-500' : 'text-slate-700'}`}>{product.stock}</strong>
                   </p>
                 </div>
                 
-                <div className="product-card-controls">
+                <div className="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                   <motion.button 
                     whileTap={{ scale: 0.9 }}
-                    className="control-btn minus"
+                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50"
                     onClick={() => handleUpdateStock(product.id, product.stock, -1, product.name)}
                     disabled={product.stock === 0}
                   >
                     <Minus size={18} />
                   </motion.button>
                   
-                  <span>{product.stock}</span>
+                  <span className="font-bold text-lg text-slate-700">{product.stock}</span>
                   
                   <motion.button 
                     whileTap={{ scale: 0.9 }}
-                    className="control-btn plus"
+                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
                     onClick={() => handleUpdateStock(product.id, product.stock, 1, product.name)}
                   >
                     <Plus size={18} />
