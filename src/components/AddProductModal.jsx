@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { X, Upload, Loader2, Search, Camera, ScanLine } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Upload, Loader2, Search, Camera, ScanLine, Zap, ZapOff } from 'lucide-react';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import catalog from '../data/catalog.json';
@@ -7,7 +7,7 @@ import { logHistory } from '../utils/history';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 
 export default function AddProductModal({ isOpen, onClose, productToEdit = null }) {
   const [name, setName] = useState('');
@@ -23,6 +23,8 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [userCatalog, setUserCatalog] = useState([]);
+  const [flashOn, setFlashOn] = useState(false);
+  const scannerRef = useRef(null);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -100,30 +102,52 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
   }, [name, productToEdit, userCatalog]);
 
   useEffect(() => {
-    let scanner;
+    let html5QrCode;
     if (isScanning && isOpen) {
+      setFlashOn(false);
       setTimeout(() => {
-        scanner = new Html5QrcodeScanner(
-          "reader",
-          { fps: 10, qrbox: {width: 250, height: 100}, showTorchButtonIfSupported: true },
-          false
-        );
-        scanner.render((decodedText) => {
-          setBarcode(decodedText);
-          setIsScanning(false);
-          scanner.clear();
-          toast.success("Código escaneado");
-        }, (error) => {
-          // ignore
+        html5QrCode = new Html5Qrcode("reader");
+        scannerRef.current = html5QrCode;
+        html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 150 },
+            aspectRatio: 1.777778, // Configura para aspecto 16:9 (mayor calidad)
+          },
+          (decodedText) => {
+            setBarcode(decodedText);
+            setIsScanning(false);
+            toast.success("Código escaneado exitosamente");
+          },
+          (errorMessage) => {
+            // Se ignora el error continuo de no encontrar QR
+          }
+        ).catch((err) => {
+          console.error(err);
+          toast.error("Error al iniciar la cámara. Verifica los permisos.");
         });
       }, 100);
     }
     return () => {
-      if (scanner) {
-        scanner.clear().catch(e => console.log(e));
+      if (html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop().then(() => html5QrCode.clear()).catch(console.error);
       }
     };
   }, [isScanning, isOpen]);
+
+  const toggleFlash = async () => {
+    if (scannerRef.current && scannerRef.current.getState() === 2) { // 2 = SCANNING
+      try {
+        await scannerRef.current.applyVideoConstraints({
+          advanced: [{ torch: !flashOn }]
+        });
+        setFlashOn(!flashOn);
+      } catch (err) {
+        toast.error("Tu dispositivo o navegador no soporta encender la linterna");
+      }
+    }
+  };
 
   const handleSelectProduct = (product) => {
     setName(product.name);
@@ -306,9 +330,14 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
               </div>
 
               {isScanning && (
-                <div className="w-full rounded-xl overflow-hidden border-2 border-orange-500">
-                  <div id="reader" width="100%"></div>
-                  <button type="button" onClick={() => setIsScanning(false)} className="w-full py-2 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-medium text-sm">
+                <div className="w-full rounded-xl overflow-hidden border-2 border-orange-500 bg-black relative">
+                  <div id="reader" className="w-full min-h-[250px]"></div>
+                  <div className="absolute top-2 right-2 flex gap-2 z-50">
+                    <button type="button" onClick={toggleFlash} className="bg-slate-800/80 text-white p-2 rounded-full backdrop-blur-md hover:bg-slate-700">
+                      {flashOn ? <ZapOff size={20} /> : <Zap size={20} />}
+                    </button>
+                  </div>
+                  <button type="button" onClick={() => setIsScanning(false)} className="w-full py-3 bg-slate-900 text-white font-medium text-sm border-t border-slate-700 hover:bg-slate-800 transition-colors">
                     Cancelar Escáner
                   </button>
                 </div>
