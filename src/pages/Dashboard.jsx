@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle, FileText } from 'lucide-react';
+import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle } from 'lucide-react';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import ProductDetailsModal from '../components/ProductDetailsModal';
 import AddProductModal from '../components/AddProductModal';
-import ImportInvoiceModal from '../components/ImportInvoiceModal';
 import { logHistory } from '../utils/history';
 import { exportToCSV } from '../utils/exportData';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,7 +20,6 @@ export default function Dashboard() {
   const [categoryFilter, setCategoryFilter] = useState('Todos');
   const [campaignFilter, setCampaignFilter] = useState('Todas');
   const [showLowStock, setShowLowStock] = useState(false);
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -202,14 +200,6 @@ export default function Dashboard() {
             title="Filtrar Stock Bajo"
           >
             <AlertTriangle size={20} />
-          </button>
-
-          <button 
-            onClick={() => setIsImportModalOpen(true)}
-            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
-            title="Importar Factura Rápida"
-          >
-            <FileText size={20} />
           </button>
 
           <button 
@@ -438,11 +428,6 @@ export default function Dashboard() {
         isOpen={!!editingProduct} 
         onClose={() => setEditingProduct(null)} 
         productToEdit={editingProduct} 
-      />
-
-      <ImportInvoiceModal
-        isOpen={isImportModalOpen}
-        onClose={() => setIsImportModalOpen(false)}
       />
     </motion.div>
   );

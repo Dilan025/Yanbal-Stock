@@ -102,12 +102,6 @@ function App() {
       }
     };
     fetchName();
-
-    if (currentUser?.uid === '3gxf9ODbsgdzLDJmq67W7ZQ6zeG2') {
-      setDoc(doc(db, 'users', currentUser.uid, 'settings', 'profile'), { 
-        phone: '+51 924 828 838' 
-      }, { merge: true }).catch(console.error);
-    }
   }, [currentUser]);
 
   const handleLogout = async () => {
