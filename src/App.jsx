@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Package, Repeat, PlusCircle, Activity, LogOut, User, Users, Loader2, Moon, Sun, DollarSign, ShoppingBag } from 'lucide-react';
 import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -17,6 +18,20 @@ import Clients from './pages/Clients';
 import Finances from './pages/Finances';
 import Profile from './pages/Profile';
 import './App.css';
+
+// Componente para animar las páginas
+function PageWrapper({ children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 // Componente para el menú de navegación inferior (para móviles) o lateral (escritorio)
 function Navigation({ uid }) {
@@ -125,7 +140,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-16 md:pb-0 flex flex-col transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-black pb-16 md:pb-0 flex flex-col transition-colors">
       <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-40 border-b border-gray-200 dark:border-slate-700 transition-colors">
         <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap lg:flex-nowrap items-center justify-between gap-y-4">
           
@@ -221,14 +236,16 @@ function App() {
       </header>
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/loans" element={<Loans />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/finances" element={<Finances />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageWrapper><Dashboard /></PageWrapper>} />
+            <Route path="/loans" element={<PageWrapper><Loans /></PageWrapper>} />
+            <Route path="/clients" element={<PageWrapper><Clients /></PageWrapper>} />
+            <Route path="/finances" element={<PageWrapper><Finances /></PageWrapper>} />
+            <Route path="/history" element={<PageWrapper><History /></PageWrapper>} />
+            <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+          </Routes>
+        </AnimatePresence>
       </main>
 
       <Navigation uid={currentUser?.uid} />

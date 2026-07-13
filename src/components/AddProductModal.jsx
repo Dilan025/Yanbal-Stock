@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Upload, Loader2, Search, Camera, ScanLine, Zap, ZapOff } from 'lucide-react';
-import { collection, addDoc, serverTimestamp, doc, updateDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, updateDoc, getDocs, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import catalog from '../data/catalog.json';
 import { logHistory } from '../utils/history';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import imageCompression from 'browser-image-compression';
 import { toast } from 'react-hot-toast';
 import { Html5Qrcode } from 'html5-qrcode';
 
@@ -29,25 +30,41 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
 
   useEffect(() => {
     if (isOpen && currentUser) {
-      const fetchUserProducts = async () => {
+      const fetchCatalogs = async () => {
         try {
-          const snapshot = await getDocs(collection(db, 'users', currentUser.uid, 'products'));
           const products = [];
-          snapshot.forEach(doc => {
+          
+          // Cargar productos del usuario
+          const userSnapshot = await getDocs(collection(db, 'users', currentUser.uid, 'products'));
+          userSnapshot.forEach(doc => {
             const data = doc.data();
             products.push({
               name: data.name,
               category: data.category,
               imageUrl: data.imageUrl,
-              price: data.price
+              price: data.price,
+              barcode: data.barcode || ''
             });
           });
+          
+          // Cargar catálogo global
+          const globalSnapshot = await getDocs(collection(db, 'global_catalog'));
+          globalSnapshot.forEach(doc => {
+            const data = doc.data();
+            products.push({
+              name: data.name,
+              category: data.category,
+              imageUrl: data.imageUrl,
+              barcode: data.barcode || ''
+            });
+          });
+          
           setUserCatalog(products);
         } catch (error) {
-          console.error("Error loading user catalog", error);
+          console.error("Error loading catalogs", error);
         }
       };
-      fetchUserProducts();
+      fetchCatalogs();
     }
   }, [isOpen, currentUser]);
 
@@ -151,50 +168,37 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
 
   const handleSelectProduct = (product) => {
     setName(product.name);
-    setCategory(product.category);
+    if (product.category) setCategory(product.category);
+    if (product.barcode) setBarcode(product.barcode);
+    if (product.imageUrl) setImageBase64(product.imageUrl);
     setShowSuggestions(false);
-    setImageBase64(product.imageUrl);
   };
 
   if (!isOpen) return null;
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 500;
-        const MAX_HEIGHT = 500;
-        let width = img.width;
-        let height = img.height;
-
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height;
-            height = MAX_HEIGHT;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        setImageBase64(dataUrl);
+    try {
+      const options = {
+        maxSizeMB: 0.15, // Max 150KB
+        maxWidthOrHeight: 600,
+        useWebWorker: true,
+        fileType: 'image/webp'
       };
-    };
+      
+      const compressedFile = await imageCompression(file, options);
+      
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+      reader.onloadend = () => {
+        setImageBase64(reader.result);
+      };
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      toast.error("Error al procesar la imagen");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -238,6 +242,27 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
           details: `Nuevo producto agregado (Stock: ${stock})`
         });
         toast.success('Producto agregado con éxito');
+      }
+
+      // Guardar en el Catálogo Global Colaborativo
+      try {
+        const normalizedName = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (normalizedName) {
+          const globalRef = doc(db, 'global_catalog', normalizedName);
+          // Usamos merge para no sobreescribir si alguien ya subió una mejor foto, 
+          // a menos que nosotros estemos subiendo una nueva foto.
+          const globalData = {
+            name: name.trim(),
+            category,
+            updatedAt: serverTimestamp()
+          };
+          if (barcode) globalData.barcode = barcode;
+          if (imageBase64) globalData.imageUrl = imageBase64;
+          
+          await setDoc(globalRef, globalData, { merge: true });
+        }
+      } catch (e) {
+        console.error("Error updating global catalog:", e);
       }
 
       onClose();

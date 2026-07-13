@@ -313,17 +313,38 @@ export default function Dashboard() {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-12 text-slate-500 dark:text-slate-400">
-          <Loader2 className="animate-spin mb-2" size={24} />
-          <span>Cargando inventario...</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div key={n} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col h-[320px] animate-pulse">
+              <div className="h-36 bg-slate-200 dark:bg-slate-700 w-full mt-4"></div>
+              <div className="p-4 flex-1">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-full w-20"></div>
+                  <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-full w-16"></div>
+                </div>
+                <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded-md w-3/4 mb-2 mt-4"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-md w-1/2 mt-3"></div>
+              </div>
+              <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                 <div className="h-8 w-8 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+                 <div className="h-6 w-10 bg-slate-200 dark:bg-slate-700 rounded-md"></div>
+                 <div className="h-8 w-8 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : filteredProducts.length === 0 ? (
         <motion.div 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl"
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center justify-center py-20 px-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl bg-white dark:bg-slate-800/50 text-center"
         >
-          <Package size={64} className="text-slate-300 dark:text-slate-600 mb-4" />
-          <p className="text-lg text-slate-500 dark:text-slate-400">No se encontraron productos.</p>
+          <div className="bg-orange-100 dark:bg-orange-900/30 p-6 rounded-full mb-6">
+            <Package size={64} className="text-orange-500" />
+          </div>
+          <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Tu inventario está vacío</h3>
+          <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-8">
+            Comienza a administrar tu negocio agregando tu primer producto. ¡Usa el catálogo colaborativo para hacerlo en segundos!
+          </p>
         </motion.div>
       ) : (
         <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

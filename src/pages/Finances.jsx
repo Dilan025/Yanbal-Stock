@@ -159,11 +159,13 @@ export default function Finances() {
           </div>
         </div>
       ) : (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-12 text-center">
-          <DollarSign size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
-          <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">Aún no hay ventas</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-12 text-center flex flex-col items-center">
+          <div className="bg-emerald-100 dark:bg-emerald-900/30 p-6 rounded-full mb-6">
+            <TrendingUp size={64} className="text-emerald-500" />
+          </div>
+          <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Aún no hay ventas registradas</h3>
           <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-            Cuando presiones el botón "Vender Producto" en los detalles de tu inventario, aquí aparecerán tus estadísticas de ingresos y ganancias.
+            Cuando registres tu primera venta desde el inventario, aparecerán aquí tus gráficos y estadísticas de ganancias.
           </p>
         </div>
       )}

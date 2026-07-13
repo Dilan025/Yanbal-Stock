@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableMultiTabIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
@@ -18,5 +18,13 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and Cloud Storage and Auth
 export const db = getFirestore(app);
+
+enableMultiTabIndexedDbPersistence(db).catch((err) => {
+  if (err.code == 'failed-precondition') {
+    console.warn("Firebase offline persistence failed: Multiple tabs open.");
+  } else if (err.code == 'unimplemented') {
+    console.warn("Firebase offline persistence is not supported in this browser.");
+  }
+});
 export const storage = getStorage(app);
 export const auth = getAuth(app);

@@ -85,9 +85,37 @@ export default function Catalog() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <Loader2 className="animate-spin text-orange-500 mb-4" size={40} />
-        <p className="text-gray-600 font-medium">Cargando catálogo...</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-black pb-12 transition-colors">
+        <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-40 border-b border-gray-200 dark:border-slate-700">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-4">
+            <div className="flex items-center gap-2 justify-center">
+              <div className="h-8 w-8 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse"></div>
+              <div className="h-6 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-5 w-48 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+              <div className="h-4 w-64 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+              <div key={n} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col h-[280px] animate-pulse">
+                <div className="h-32 bg-slate-200 dark:bg-slate-700 w-full"></div>
+                <div className="p-3 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded-full w-16 mb-2"></div>
+                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full mb-1"></div>
+                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-3"></div>
+                    <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded w-20"></div>
+                  </div>
+                  <div className="h-10 bg-slate-200 dark:bg-slate-700 rounded-lg w-full mt-3"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
       </div>
     );
   }
@@ -107,16 +135,16 @@ export default function Catalog() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      <header className="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-black pb-12 transition-colors">
+      <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-40 border-b border-gray-200 dark:border-slate-700 transition-colors">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-4">
           <div className="flex items-center gap-2 justify-center">
             <img src="/yanbal-logo.svg" alt="Yanbal" className="h-8" onError={(e) => { e.target.style.display='none' }}/>
-            <div className="text-xl font-bold text-gray-800">Yanbal <span className="text-orange-500">Catálogo</span></div>
+            <div className="text-xl font-bold text-gray-800 dark:text-white">Yanbal <span className="text-orange-500">Catálogo</span></div>
           </div>
           <div className="text-center">
-            <h1 className="font-bold text-gray-800 text-lg">Catálogo de {consultantName}</h1>
-            <p className="text-sm text-gray-500">¡Mira los productos que tengo en stock para entrega inmediata!</p>
+            <h1 className="font-bold text-gray-800 dark:text-white text-lg">Catálogo de {consultantName}</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400">¡Mira los productos que tengo en stock para entrega inmediata!</p>
           </div>
         </div>
       </header>
@@ -148,9 +176,14 @@ export default function Catalog() {
         </div>
 
         {filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-500 bg-white rounded-2xl shadow-sm mt-4">
-            <Package size={48} className="text-gray-300 mb-4" />
-            <p className="text-lg font-medium">No se encontraron productos.</p>
+          <div className="flex flex-col items-center justify-center py-20 px-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl bg-white dark:bg-slate-800/50 text-center mt-4">
+            <div className="bg-orange-100 dark:bg-orange-900/30 p-6 rounded-full mb-6">
+              <Package size={64} className="text-orange-500" />
+            </div>
+            <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">No se encontraron productos</h3>
+            <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+              Intenta buscar con otras palabras o selecciona otra categoría.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
