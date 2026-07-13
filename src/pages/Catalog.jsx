@@ -74,7 +74,7 @@ export default function Catalog() {
   });
 
   const handleWhatsApp = (product) => {
-    const text = `¡Hola! Vengo de tu catálogo virtual. Estoy interesado/a en comprar el producto: *${product.name}* (Precio: S/ ${product.price.toFixed(2)}). ¿Aún lo tienes disponible?`;
+    const text = `¡Hola ${consultantName}! Vengo de tu catálogo virtual. Estoy interesado/a en comprar el producto: *${product.name}* (Precio: S/ ${product.price.toFixed(2)}). ¿Aún lo tienes en stock?`;
     if (consultantPhone) {
       window.open(`https://wa.me/${consultantPhone}?text=${encodeURIComponent(text)}`, '_blank');
     } else {
@@ -179,9 +179,12 @@ export default function Catalog() {
                     <span className="text-[10px] font-bold text-orange-500 uppercase tracking-wider mb-1">{product.category}</span>
                     <h3 className="font-bold text-gray-800 text-sm mb-1 leading-tight flex-1">{product.name}</h3>
                     
-                    <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center justify-between mt-2 bg-gray-50 px-2 py-1.5 rounded-lg border border-gray-100">
                       <span className="font-black text-gray-900">
                         {product.price > 0 ? `S/ ${product.price.toFixed(2)}` : 'Consultar'}
+                      </span>
+                      <span className="text-[10px] font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
+                        Stock: {product.stock}
                       </span>
                     </div>
 

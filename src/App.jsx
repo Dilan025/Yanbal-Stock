@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Package, Repeat, PlusCircle, Activity, LogOut, User, Users, Loader2, Moon, Sun, DollarSign } from 'lucide-react';
+import { Package, Repeat, PlusCircle, Activity, LogOut, User, Users, Loader2, Moon, Sun, DollarSign, ShoppingBag } from 'lucide-react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { signOut } from 'firebase/auth';
@@ -18,7 +18,7 @@ import Finances from './pages/Finances';
 import './App.css';
 
 // Componente para el menú de navegación inferior (para móviles) o lateral (escritorio)
-function Navigation() {
+function Navigation({ uid }) {
   const location = useLocation();
   
   return (
@@ -51,6 +51,15 @@ function Navigation() {
         <Users size={24} />
         <span className="text-[10px] font-medium mt-1">Clientes</span>
       </Link>
+      <a 
+        href={`/catalog/${uid}`} 
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30`}
+      >
+        <ShoppingBag size={24} />
+        <span className="text-[10px] font-medium mt-1">Mi Catálogo</span>
+      </a>
     </nav>
   );
 }
@@ -173,6 +182,15 @@ function App() {
               <Activity size={20} />
               <span>Historial</span>
             </Link>
+            <a 
+              href={`/catalog/${currentUser?.uid}`} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors text-emerald-600 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30`}
+            >
+              <ShoppingBag size={20} />
+              <span>Mi Catálogo</span>
+            </a>
           </nav>
 
           {/* Controles de Usuario */}
@@ -186,7 +204,7 @@ function App() {
                 const newName = prompt("¿Cuál es el nombre de la Consultora/Dueño de la cuenta?", accountName);
                 if (newName && newName.trim().length > 0) {
                   try {
-                    await setDoc(doc(db, "users", currentUser.uid, "settings", "profile"), { name: newName.trim() });
+                    await setDoc(doc(db, "users", currentUser.uid, "settings", "profile"), { name: newName.trim() }, { merge: true });
                     setAccountName(newName.trim());
                     toast.success("Nombre actualizado");
                   } catch (e) {
@@ -233,7 +251,7 @@ function App() {
         </Routes>
       </main>
 
-      <Navigation />
+      <Navigation uid={currentUser?.uid} />
       
       <AddProductModal 
         isOpen={isModalOpen} 
