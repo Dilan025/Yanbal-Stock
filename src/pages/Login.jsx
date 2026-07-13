@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Lock, LogIn, UserPlus, Loader2 } from 'lucide-react';
-import { auth } from '../firebase';
+import { Lock, LogIn, UserPlus, Loader2, Phone } from 'lucide-react';
+import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
@@ -23,7 +25,12 @@ export default function Login() {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        if (phone.trim() !== '') {
+          await setDoc(doc(db, 'users', userCredential.user.uid, 'settings', 'profile'), {
+            phone: phone.trim()
+          }, { merge: true });
+        }
       }
     } catch (err) {
       console.error(err);
@@ -135,6 +142,23 @@ export default function Login() {
               </button>
             </div>
           </div>
+          
+          {!isLogin && (
+            <div>
+              <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Número de WhatsApp</label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Ej. +51 987654321"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  required={!isLogin}
+                />
+              </div>
+            </div>
+          )}
           
           {error && <div className="p-3 bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg text-sm border border-red-100 dark:border-red-800">{error}</div>}
           
