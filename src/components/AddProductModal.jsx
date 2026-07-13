@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Upload, Loader2, Search, Camera, ScanLine } from 'lucide-react';
-import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import catalog from '../data/catalog.json';
 import { logHistory } from '../utils/history';
@@ -22,7 +22,32 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
+  const [userCatalog, setUserCatalog] = useState([]);
   const { currentUser } = useAuth();
+
+  useEffect(() => {
+    if (isOpen && currentUser) {
+      const fetchUserProducts = async () => {
+        try {
+          const snapshot = await getDocs(collection(db, 'users', currentUser.uid, 'products'));
+          const products = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            products.push({
+              name: data.name,
+              category: data.category,
+              imageUrl: data.imageUrl,
+              price: data.price
+            });
+          });
+          setUserCatalog(products);
+        } catch (error) {
+          console.error("Error loading user catalog", error);
+        }
+      };
+      fetchUserProducts();
+    }
+  }, [isOpen, currentUser]);
 
   useEffect(() => {
     if (isOpen) {
@@ -53,11 +78,26 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
       setSuggestions([]);
       return;
     }
-    const filtered = catalog.filter(p => 
+
+    const combined = [...userCatalog, ...catalog];
+    const uniqueMap = new Map();
+    
+    combined.forEach(p => {
+      const key = p.name.toLowerCase().trim();
+      if (!uniqueMap.has(key)) {
+        uniqueMap.set(key, p);
+      } else if (p.imageUrl && !uniqueMap.get(key).imageUrl) {
+        uniqueMap.set(key, p);
+      }
+    });
+    
+    const uniqueCatalog = Array.from(uniqueMap.values());
+
+    const filtered = uniqueCatalog.filter(p => 
       p.name.toLowerCase().includes(name.toLowerCase())
     );
     setSuggestions(filtered);
-  }, [name, productToEdit]);
+  }, [name, productToEdit, userCatalog]);
 
   useEffect(() => {
     let scanner;
