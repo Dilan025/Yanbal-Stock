@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle } from 'lucide-react';
+import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle, FileText } from 'lucide-react';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import ProductDetailsModal from '../components/ProductDetailsModal';
 import AddProductModal from '../components/AddProductModal';
+import ImportInvoiceModal from '../components/ImportInvoiceModal';
 import { logHistory } from '../utils/history';
 import { exportToCSV } from '../utils/exportData';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,7 +19,9 @@ const COLORS = ['#FF5E00', '#10B981', '#3B82F6', '#F59E0B', '#8B5CF6', '#EC4899'
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Todos');
+  const [campaignFilter, setCampaignFilter] = useState('Todas');
   const [showLowStock, setShowLowStock] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -125,7 +128,7 @@ export default function Dashboard() {
   const handleExportWhatsApp = () => {
     let text = "*Inventario Yanbal*\n\n";
     const categories = {};
-    products.forEach(p => {
+    filteredProducts.forEach(p => {
       if (!categories[p.category]) categories[p.category] = [];
       categories[p.category].push(p);
     });
@@ -140,7 +143,7 @@ export default function Dashboard() {
       text += `\n`;
     });
 
-    text += `*Total Productos:* ${products.length}\n`;
+    text += `*Total Productos:* ${filteredProducts.length}\n`;
     text += `*Valor Estimado:* S/ ${totalValue.toFixed(2)}\n`;
 
     const encodedText = encodeURIComponent(text);
@@ -150,16 +153,18 @@ export default function Dashboard() {
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'Todos' || product.category === categoryFilter;
+    const matchesCampaign = campaignFilter === 'Todas' || product.campaign === campaignFilter;
     const matchesLowStock = !showLowStock || product.stock <= 2;
-    return matchesSearch && matchesCategory && matchesLowStock;
+    return matchesSearch && matchesCategory && matchesCampaign && matchesLowStock;
   });
 
-  const totalValue = products.reduce((acc, product) => acc + (product.stock * (product.price || 0)), 0);
+  const totalValue = filteredProducts.reduce((acc, product) => acc + (product.stock * (product.price || 0)), 0);
   const categories = ['Todos', ...new Set(products.map(p => p.category))];
+  const campaigns = ['Todas', ...new Set(products.map(p => p.campaign).filter(Boolean))];
 
   const chartData = useMemo(() => {
     const dataMap = {};
-    products.forEach(p => {
+    filteredProducts.forEach(p => {
       const val = p.stock * (p.price || 0);
       if (val > 0) {
         if (!dataMap[p.category]) dataMap[p.category] = 0;
@@ -167,7 +172,7 @@ export default function Dashboard() {
       }
     });
     return Object.keys(dataMap).map(key => ({ name: key, value: dataMap[key] }));
-  }, [products]);
+  }, [filteredProducts]);
 
   return (
     <motion.div 
@@ -200,11 +205,31 @@ export default function Dashboard() {
           </button>
 
           <button 
+            onClick={() => setIsImportModalOpen(true)}
+            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+            title="Importar Factura Rápida"
+          >
+            <FileText size={20} />
+          </button>
+
+          <button 
             onClick={handleExportWhatsApp}
             className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
             title="Compartir por WhatsApp"
           >
             <MessageCircle size={20} />
+          </button>
+
+          <button 
+            onClick={() => {
+              const url = `${window.location.origin}/catalog/${currentUser?.uid}`;
+              navigator.clipboard.writeText(url);
+              toast.success('Enlace de catálogo copiado');
+            }}
+            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+            title="Copiar enlace del Catálogo Público"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
           </button>
 
           <button 
@@ -268,16 +293,33 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="flex overflow-x-auto pb-4 mb-2 gap-2 hide-scrollbar">
-        {categories.map(cat => (
-          <button 
-            key={cat}
-            onClick={() => setCategoryFilter(cat)}
-            className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm ${categoryFilter === cat ? 'bg-orange-500 text-white scale-105 border-transparent' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
-          >
-            {cat}
-          </button>
-        ))}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
+        <div className="flex overflow-x-auto pb-2 gap-2 hide-scrollbar w-full sm:w-auto">
+          {categories.map(cat => (
+            <button 
+              key={cat}
+              onClick={() => setCategoryFilter(cat)}
+              className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm ${categoryFilter === cat ? 'bg-orange-500 text-white scale-105 border-transparent' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        
+        {campaigns.length > 1 && (
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <label className="text-sm font-bold text-slate-500 dark:text-slate-400 whitespace-nowrap">Campaña:</label>
+            <select 
+              value={campaignFilter}
+              onChange={(e) => setCampaignFilter(e.target.value)}
+              className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2 font-bold shadow-sm"
+            >
+              {campaigns.map(camp => (
+                <option key={camp} value={camp}>{camp}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {loading ? (
@@ -396,6 +438,11 @@ export default function Dashboard() {
         isOpen={!!editingProduct} 
         onClose={() => setEditingProduct(null)} 
         productToEdit={editingProduct} 
+      />
+
+      <ImportInvoiceModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
       />
     </motion.div>
   );

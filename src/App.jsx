@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Package, Repeat, PlusCircle, Activity, LogOut, User, Loader2, Moon, Sun } from 'lucide-react';
+import { Package, Repeat, PlusCircle, Activity, LogOut, User, Users, Loader2, Moon, Sun, DollarSign } from 'lucide-react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { signOut } from 'firebase/auth';
@@ -12,6 +12,9 @@ import History from './pages/History';
 import Login from './pages/Login';
 import AddProductModal from './components/AddProductModal';
 import ReloadPrompt from './components/ReloadPrompt';
+import Catalog from './pages/Catalog';
+import Clients from './pages/Clients';
+import Finances from './pages/Finances';
 import './App.css';
 
 // Componente para el menú de navegación inferior (para móviles) o lateral (escritorio)
@@ -25,21 +28,28 @@ function Navigation() {
         className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
       >
         <Package size={24} />
-        <span className="text-xs font-medium mt-1">Inventario</span>
+        <span className="text-[10px] font-medium mt-1">Inventario</span>
+      </Link>
+      <Link 
+        to="/finances" 
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/finances' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
+      >
+        <DollarSign size={24} />
+        <span className="text-[10px] font-medium mt-1">Finanzas</span>
       </Link>
       <Link 
         to="/loans" 
         className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/loans' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
       >
         <Repeat size={24} />
-        <span className="text-xs font-medium mt-1">Préstamos</span>
+        <span className="text-[10px] font-medium mt-1">Préstamos</span>
       </Link>
       <Link 
-        to="/history" 
-        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/history' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
+        to="/clients" 
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/clients' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
       >
-        <Activity size={24} />
-        <span className="text-xs font-medium mt-1">Historial</span>
+        <Users size={24} />
+        <span className="text-[10px] font-medium mt-1">Clientes</span>
       </Link>
     </nav>
   );
@@ -136,11 +146,25 @@ function App() {
               <span>Inventario</span>
             </Link>
             <Link 
+              to="/finances" 
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/finances' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+            >
+              <DollarSign size={20} />
+              <span>Finanzas</span>
+            </Link>
+            <Link 
               to="/loans" 
               className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/loans' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
               <Repeat size={20} />
               <span>Préstamos</span>
+            </Link>
+            <Link 
+              to="/clients" 
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/clients' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+            >
+              <Users size={20} />
+              <span>Clientes</span>
             </Link>
             <Link 
               to="/history" 
@@ -203,6 +227,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/loans" element={<Loans />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/finances" element={<Finances />} />
           <Route path="/history" element={<History />} />
         </Routes>
       </main>
@@ -240,7 +266,10 @@ export default function AppWrapper() {
           },
         }} />
         <ReloadPrompt />
-        <App />
+        <Routes>
+          <Route path="/catalog/:uid" element={<Catalog />} />
+          <Route path="*" element={<App />} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
