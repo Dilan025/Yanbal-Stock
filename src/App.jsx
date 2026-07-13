@@ -181,13 +181,6 @@ function App() {
               <Activity size={18} />
               <span className="text-sm lg:text-base">Historial</span>
             </Link>
-            <Link 
-              to="/profile" 
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/profile' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
-            >
-              <User size={18} />
-              <span className="text-sm lg:text-base">Perfil</span>
-            </Link>
           </nav>
 
           {/* Controles de Usuario */}
