@@ -15,6 +15,7 @@ import ReloadPrompt from './components/ReloadPrompt';
 import Catalog from './pages/Catalog';
 import Clients from './pages/Clients';
 import Finances from './pages/Finances';
+import Profile from './pages/Profile';
 import './App.css';
 
 // Componente para el menú de navegación inferior (para móviles) o lateral (escritorio)
@@ -51,15 +52,13 @@ function Navigation({ uid }) {
         <Users size={24} />
         <span className="text-[10px] font-medium mt-1">Clientes</span>
       </Link>
-      <a 
-        href={`/catalog/${uid}`} 
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`flex flex-col items-center p-2 rounded-lg transition-colors text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30`}
+      <Link 
+        to="/profile" 
+        className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/profile' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
       >
-        <ShoppingBag size={24} />
-        <span className="text-[10px] font-medium mt-1">Mi Catálogo</span>
-      </a>
+        <User size={24} />
+        <span className="text-[10px] font-medium mt-1">Perfil</span>
+      </Link>
     </nav>
   );
 }
@@ -182,40 +181,27 @@ function App() {
               <Activity size={18} />
               <span className="text-sm lg:text-base">Historial</span>
             </Link>
-            <a 
-              href={`/catalog/${currentUser?.uid}`} 
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors text-emerald-600 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 whitespace-nowrap`}
+            <Link 
+              to="/profile" 
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/profile' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
-              <ShoppingBag size={18} />
-              <span className="text-sm lg:text-base">Mi Catálogo</span>
-            </a>
+              <User size={18} />
+              <span className="text-sm lg:text-base">Perfil</span>
+            </Link>
           </nav>
 
           {/* Controles de Usuario */}
           <div className="flex items-center justify-between lg:justify-end w-full lg:w-auto gap-2 lg:flex-shrink-0">
             
             {/* Nombre de la Cuenta */}
-            <div 
-              className="flex items-center justify-center lg:justify-start gap-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 px-3 py-2 lg:py-1.5 rounded-full cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex-1 lg:flex-none overflow-hidden"
-              title="Cambiar Nombre de Cuenta"
-              onClick={async () => {
-                const newName = prompt("¿Cuál es el nombre de la Consultora/Dueño de la cuenta?", accountName);
-                if (newName && newName.trim().length > 0) {
-                  try {
-                    await setDoc(doc(db, "users", currentUser.uid, "settings", "profile"), { name: newName.trim() }, { merge: true });
-                    setAccountName(newName.trim());
-                    toast.success("Nombre actualizado");
-                  } catch (e) {
-                    toast.error("Error al actualizar el nombre");
-                  }
-                }
-              }}
+            <Link 
+              to="/profile"
+              className="flex items-center justify-center lg:justify-start gap-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 px-3 py-2 lg:py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex-1 lg:flex-none overflow-hidden"
+              title="Mi Perfil"
             >
               <User size={16} className="shrink-0" />
               <span className="truncate">{accountName}</span>
-            </div>
+            </Link>
 
             <div className="flex items-center gap-1 shrink-0">
               <ThemeToggle />
@@ -248,6 +234,7 @@ function App() {
           <Route path="/clients" element={<Clients />} />
           <Route path="/finances" element={<Finances />} />
           <Route path="/history" element={<History />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
 
