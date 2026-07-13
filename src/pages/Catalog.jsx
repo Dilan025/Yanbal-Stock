@@ -10,6 +10,7 @@ export default function Catalog() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [consultantName, setConsultantName] = useState('');
+  const [consultantPhone, setConsultantPhone] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Todos');
   const [categories, setCategories] = useState(['Todos']);
@@ -18,11 +19,19 @@ export default function Catalog() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch consultant name
+        // Fetch consultant name and phone
         const profileRef = doc(db, 'users', uid, 'settings', 'profile');
         const profileSnap = await getDoc(profileRef);
-        if (profileSnap.exists() && profileSnap.data().name) {
-          setConsultantName(profileSnap.data().name);
+        if (profileSnap.exists()) {
+          const data = profileSnap.data();
+          if (data.name) setConsultantName(data.name);
+          else setConsultantName('Consultora Yanbal');
+          
+          if (data.phone) {
+            // Clean phone number (remove spaces, plus sign, etc for wa.me)
+            const cleanPhone = data.phone.replace(/\D/g, '');
+            setConsultantPhone(cleanPhone);
+          }
         } else {
           setConsultantName('Consultora Yanbal');
         }
@@ -66,7 +75,12 @@ export default function Catalog() {
 
   const handleWhatsApp = (product) => {
     const text = `¡Hola! Vengo de tu catálogo virtual. Estoy interesado/a en comprar el producto: *${product.name}* (Precio: S/ ${product.price.toFixed(2)}). ¿Aún lo tienes disponible?`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    if (consultantPhone) {
+      window.open(`https://wa.me/${consultantPhone}?text=${encodeURIComponent(text)}`, '_blank');
+    } else {
+      // Fallback if no phone is registered
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
   };
 
   if (loading) {
