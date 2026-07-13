@@ -128,17 +128,17 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-16 md:pb-0 flex flex-col transition-colors">
       <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-10 border-b border-gray-200 dark:border-slate-700 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap lg:flex-nowrap items-center justify-between gap-y-4">
           
           {/* Logo y Botón Agregar (Móvil) */}
-          <div className="flex flex-row items-center justify-between w-full md:w-auto">
+          <div className="flex flex-row items-center justify-between w-full lg:w-auto lg:flex-shrink-0">
             <div className="flex items-center gap-2">
               <img src="/yanbal-logo.svg" alt="Yanbal" className="h-8" onError={(e) => { e.target.style.display='none' }}/>
               <div className="text-xl font-bold text-slate-800 dark:text-white">Yanbal <span className="text-orange-500">Stock</span></div>
             </div>
             
             <button 
-              className="md:hidden flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white w-9 h-9 rounded-full font-medium transition-colors shadow-sm"
+              className="lg:hidden flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white w-9 h-9 rounded-full font-medium transition-colors shadow-sm"
               onClick={() => setIsModalOpen(true)}
             >
               <PlusCircle size={20} />
@@ -146,7 +146,7 @@ function App() {
           </div>
           
           {/* Navegación para Escritorio */}
-          <nav className="hidden md:flex items-center gap-2 lg:gap-4 overflow-x-auto hide-scrollbar">
+          <nav className="hidden lg:flex flex-1 items-center justify-center gap-2 lg:gap-4 flex-wrap">
             <Link 
               to="/" 
               className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
@@ -194,11 +194,11 @@ function App() {
           </nav>
 
           {/* Controles de Usuario */}
-          <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-2">
+          <div className="flex items-center justify-between lg:justify-end w-full lg:w-auto gap-2 lg:flex-shrink-0">
             
             {/* Nombre de la Cuenta */}
             <div 
-              className="flex items-center justify-center md:justify-start gap-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 px-3 py-2 md:py-1.5 rounded-full cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex-1 md:flex-none overflow-hidden"
+              className="flex items-center justify-center lg:justify-start gap-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 px-3 py-2 lg:py-1.5 rounded-full cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex-1 lg:flex-none overflow-hidden"
               title="Cambiar Nombre de Cuenta"
               onClick={async () => {
                 const newName = prompt("¿Cuál es el nombre de la Consultora/Dueño de la cuenta?", accountName);
@@ -230,7 +230,7 @@ function App() {
               
               {/* Botón Agregar (Escritorio) */}
               <button 
-                className="hidden md:flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full font-medium transition-colors shadow-sm"
+                className="hidden lg:flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full font-medium transition-colors shadow-sm"
                 onClick={() => setIsModalOpen(true)}
               >
                 <PlusCircle size={20} />
