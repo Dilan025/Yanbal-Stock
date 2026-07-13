@@ -108,7 +108,7 @@ export default function Catalog() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
-      <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-200">
+      <header className="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-4">
           <div className="flex items-center gap-2 justify-center">
             <img src="/yanbal-logo.svg" alt="Yanbal" className="h-8" onError={(e) => { e.target.style.display='none' }}/>

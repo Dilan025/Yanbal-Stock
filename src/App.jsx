@@ -126,7 +126,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-16 md:pb-0 flex flex-col transition-colors">
-      <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-10 border-b border-gray-200 dark:border-slate-700 transition-colors">
+      <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-40 border-b border-gray-200 dark:border-slate-700 transition-colors">
         <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap lg:flex-nowrap items-center justify-between gap-y-4">
           
           {/* Logo y Botón Agregar (Móvil) */}
