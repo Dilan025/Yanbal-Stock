@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Package, Repeat, PlusCircle, Activity, LogOut, User, Users, Loader2, Moon, Sun, DollarSign, ShoppingBag } from 'lucide-react';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { signOut } from 'firebase/auth';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -96,20 +96,20 @@ function App() {
   const location = useLocation();
 
   React.useEffect(() => {
-    const fetchName = async () => {
-      if (!currentUser) return;
-      try {
-        const docSnap = await getDoc(doc(db, "users", currentUser.uid, "settings", "profile"));
-        if (docSnap.exists() && docSnap.data().name) {
-          setAccountName(docSnap.data().name);
-        } else {
-          setAccountName(currentUser.email.split('@')[0]);
-        }
-      } catch (e) {
-        setAccountName("Consultora");
+    if (!currentUser) return;
+    
+    const unsubscribe = onSnapshot(doc(db, "users", currentUser.uid, "settings", "profile"), (docSnap) => {
+      if (docSnap.exists() && docSnap.data().name) {
+        setAccountName(docSnap.data().name);
+      } else {
+        setAccountName(currentUser.email.split('@')[0]);
       }
-    };
-    fetchName();
+    }, (error) => {
+      console.error("Error fetching profile:", error);
+      setAccountName("Consultora");
+    });
+
+    return () => unsubscribe();
   }, [currentUser]);
 
   const handleLogout = async () => {
