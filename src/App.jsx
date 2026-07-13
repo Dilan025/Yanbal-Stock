@@ -146,50 +146,50 @@ function App() {
           </div>
           
           {/* Navegación para Escritorio */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-2 lg:gap-4 overflow-x-auto hide-scrollbar">
             <Link 
               to="/" 
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
-              <Package size={20} />
-              <span>Inventario</span>
+              <Package size={18} />
+              <span className="text-sm lg:text-base">Inventario</span>
             </Link>
             <Link 
               to="/finances" 
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/finances' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/finances' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
-              <DollarSign size={20} />
-              <span>Finanzas</span>
+              <DollarSign size={18} />
+              <span className="text-sm lg:text-base">Finanzas</span>
             </Link>
             <Link 
               to="/loans" 
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/loans' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/loans' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
-              <Repeat size={20} />
-              <span>Préstamos</span>
+              <Repeat size={18} />
+              <span className="text-sm lg:text-base">Préstamos</span>
             </Link>
             <Link 
               to="/clients" 
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/clients' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/clients' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
-              <Users size={20} />
-              <span>Clientes</span>
+              <Users size={18} />
+              <span className="text-sm lg:text-base">Clientes</span>
             </Link>
             <Link 
               to="/history" 
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors ${location.pathname === '/history' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/history' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
-              <Activity size={20} />
-              <span>Historial</span>
+              <Activity size={18} />
+              <span className="text-sm lg:text-base">Historial</span>
             </Link>
             <a 
               href={`/catalog/${currentUser?.uid}`} 
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors text-emerald-600 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30`}
+              className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors text-emerald-600 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 whitespace-nowrap`}
             >
-              <ShoppingBag size={20} />
-              <span>Mi Catálogo</span>
+              <ShoppingBag size={18} />
+              <span className="text-sm lg:text-base">Mi Catálogo</span>
             </a>
           </nav>
 
