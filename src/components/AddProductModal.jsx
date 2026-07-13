@@ -65,7 +65,7 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
       setTimeout(() => {
         scanner = new Html5QrcodeScanner(
           "reader",
-          { fps: 10, qrbox: {width: 250, height: 100} },
+          { fps: 10, qrbox: {width: 250, height: 100}, showTorchButtonIfSupported: true },
           false
         );
         scanner.render((decodedText) => {
