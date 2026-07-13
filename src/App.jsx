@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Package, Repeat, PlusCircle, Activity, LogOut, User, Users, Loader2, Moon, Sun, DollarSign } from 'lucide-react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -102,6 +102,12 @@ function App() {
       }
     };
     fetchName();
+
+    if (currentUser?.uid === '3gxf9ODbsgdzLDJmq67W7ZQ6zeG2') {
+      setDoc(doc(db, 'users', currentUser.uid, 'settings', 'profile'), { 
+        phone: '+51 924 828 838' 
+      }, { merge: true }).catch(console.error);
+    }
   }, [currentUser]);
 
   const handleLogout = async () => {
