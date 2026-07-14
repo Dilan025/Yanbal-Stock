@@ -15,6 +15,7 @@ export default function Catalog() {
   const [categoryFilter, setCategoryFilter] = useState('Todos');
   const [categories, setCategories] = useState(['Todos']);
   const [error, setError] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +73,13 @@ export default function Catalog() {
     const matchesCategory = categoryFilter === 'Todos' || product.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(20);
+  }, [searchTerm, categoryFilter]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   const handleWhatsApp = (product) => {
     const text = `¡Hola ${consultantName}! Vengo de tu catálogo virtual. Estoy interesado/a en comprar el producto: *${product.name}* (Precio: S/ ${product.price.toFixed(2)}). ¿Aún lo tienes en stock?`;
@@ -186,11 +194,12 @@ export default function Catalog() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-            <AnimatePresence>
-              {filteredProducts.map((product) => (
-                <motion.div 
-                  layout
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+              <AnimatePresence>
+                {visibleProducts.map((product) => (
+                  <motion.div 
+                    layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -213,26 +222,39 @@ export default function Catalog() {
                     <h3 className="font-bold text-gray-800 text-sm mb-1 leading-tight flex-1">{product.name}</h3>
                     
                     <div className="flex items-center justify-between mt-2 bg-gray-50 px-2 py-1.5 rounded-lg border border-gray-100">
-                      <span className="font-black text-gray-900">
-                        {product.price > 0 ? `S/ ${product.price.toFixed(2)}` : 'Consultar'}
-                      </span>
-                      <span className="text-[10px] font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
-                        Stock: {product.stock}
-                      </span>
+                        <span className="font-black text-gray-900">
+                          {product.price > 0 ? `S/ ${product.price.toFixed(2)}` : 'Consultar'}
+                        </span>
+                        <span className="text-[10px] font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
+                          Stock: {product.stock}
+                        </span>
+                      </div>
                     </div>
-
-                    <button 
-                      onClick={() => handleWhatsApp(product)}
-                      className="mt-4 w-full py-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors text-sm"
-                    >
-                      <MessageCircle size={16} />
-                      Me interesa
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                    <div className="p-3">
+                      <button 
+                        onClick={() => handleWhatsApp(product)}
+                        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm text-sm"
+                      >
+                        <MessageCircle size={16} />
+                        Lo quiero
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+            
+            {visibleCount < filteredProducts.length && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setVisibleCount(prev => prev + 20)}
+                  className="bg-orange-100 dark:bg-orange-900/50 hover:bg-orange-200 dark:hover:bg-orange-800 text-orange-600 dark:text-orange-400 font-bold py-3 px-8 rounded-full transition-colors shadow-sm"
+                >
+                  Mostrar más productos
+                </button>
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>

@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(20);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -155,6 +156,13 @@ export default function Dashboard() {
     const matchesLowStock = !showLowStock || product.stock <= 2;
     return matchesSearch && matchesCategory && matchesCampaign && matchesLowStock;
   });
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(20);
+  }, [searchTerm, categoryFilter, campaignFilter, showLowStock]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   const totalValue = filteredProducts.reduce((acc, product) => acc + (product.stock * (product.price || 0)), 0);
   const categories = ['Todos', ...new Set(products.map(p => p.category))];
@@ -347,11 +355,12 @@ export default function Dashboard() {
           </p>
         </motion.div>
       ) : (
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence>
-            {filteredProducts.map((product) => {
-              const isLowStock = product.stock > 0 && product.stock <= 2;
-              const isOutOfStock = product.stock === 0;
+        <>
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence>
+              {visibleProducts.map((product) => {
+                const isLowStock = product.stock > 0 && product.stock <= 2;
+                const isOutOfStock = product.stock === 0;
 
               return (
                 <motion.div 
@@ -434,7 +443,18 @@ export default function Dashboard() {
               );
             })}
           </AnimatePresence>
-        </motion.div>
+          </motion.div>
+          {visibleCount < filteredProducts.length && (
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={() => setVisibleCount(prev => prev + 20)}
+                className="bg-orange-100 dark:bg-orange-900/50 hover:bg-orange-200 dark:hover:bg-orange-800 text-orange-600 dark:text-orange-400 font-bold py-3 px-8 rounded-full transition-colors shadow-sm"
+              >
+                Cargar más productos
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       <ProductDetailsModal 
