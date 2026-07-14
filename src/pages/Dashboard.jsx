@@ -71,8 +71,7 @@ export default function Dashboard() {
       await updateDoc(productRef, {
         stock: newStock
       });
-      
-      await logHistory(currentUser.uid, {
+      const historyRef = await logHistory(currentUser.uid, {
         action: change > 0 ? 'STOCK_UP' : 'STOCK_DOWN',
         productId: id,
         productName: productName,
@@ -80,9 +79,28 @@ export default function Dashboard() {
         details: `Stock actualizado de ${currentStock} a ${newStock}`
       });
       
-      toast.success(change > 0 ? '+1 agregado' : '-1 retirado', {
-        icon: change > 0 ? '📈' : '📉',
-        style: { borderRadius: '10px', background: '#333', color: '#fff' }
+      toast((t) => (
+        <div className="flex items-center justify-between w-full gap-4">
+          <div className="flex items-center gap-2">
+            <span>{change > 0 ? '📈' : '📉'}</span>
+            <span className="font-medium">{change > 0 ? '+1 agregado' : '-1 retirado'}</span>
+          </div>
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              await updateDoc(productRef, { stock: currentStock });
+              if (historyRef) {
+                await deleteDoc(historyRef);
+              }
+            }}
+            className="text-xs bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded text-white font-bold transition-colors"
+          >
+            Deshacer
+          </button>
+        </div>
+      ), {
+        duration: 5000,
+        style: { borderRadius: '10px', background: '#333', color: '#fff', minWidth: '250px' }
       });
     } catch (error) {
       toast.error("Error actualizando stock");
@@ -136,11 +154,19 @@ export default function Dashboard() {
     window.open(`https://wa.me/?text=${encodedText}`, '_blank');
   };
 
+  const normalizeText = (text) => {
+    return text ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+  };
+
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.category.toLowerCase().includes(searchTerm.toLowerCase());
+    const normalizedSearch = normalizeText(searchTerm);
+    const matchesSearch = normalizeText(product.name).includes(normalizedSearch) || normalizeText(product.category).includes(normalizedSearch);
     const matchesCategory = categoryFilter === 'Todos' || product.category === categoryFilter;
     const matchesCampaign = campaignFilter === 'Todas' || product.campaign === campaignFilter;
-    const matchesLowStock = !showLowStock || product.stock <= 2;
+    
+    const alertThreshold = product.minStockAlert !== undefined ? product.minStockAlert : 2;
+    const matchesLowStock = !showLowStock || product.stock <= alertThreshold;
+    
     return matchesSearch && matchesCategory && matchesCampaign && matchesLowStock;
   });
 
@@ -358,7 +384,8 @@ export default function Dashboard() {
           <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             <AnimatePresence>
               {visibleProducts.map((product) => {
-                const isLowStock = product.stock > 0 && product.stock <= 2;
+                const alertThreshold = product.minStockAlert !== undefined ? product.minStockAlert : 2;
+                const isLowStock = product.stock > 0 && product.stock <= alertThreshold;
                 const isOutOfStock = product.stock === 0;
 
               return (

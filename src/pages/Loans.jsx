@@ -210,8 +210,16 @@ export default function Loans() {
                         {formatDate(loan.dateLent)}
                       </span>
                     </div>
+                    {loan.dueDate && (
+                      <div className="mb-1 text-sm">
+                        <span className={`font-bold ${loan.status === 'Pendiente' && new Date() > (loan.dueDate.toDate ? loan.dueDate.toDate() : new Date(loan.dueDate)) ? 'text-red-500 bg-red-100 dark:bg-red-900/50 px-2 py-0.5 rounded-full' : 'text-slate-600 dark:text-slate-400'}`}>
+                          Devolución: {formatDate(loan.dueDate)}
+                          {loan.status === 'Pendiente' && new Date() > (loan.dueDate.toDate ? loan.dueDate.toDate() : new Date(loan.dueDate)) && ' ⚠️ ¡Vencido!'}
+                        </span>
+                      </div>
+                    )}
                     {loan.notes && (
-                      <p className="text-sm italic text-slate-500 dark:text-slate-400">"{loan.notes}"</p>
+                      <p className="text-sm italic text-slate-500 dark:text-slate-400 mt-1">"{loan.notes}"</p>
                     )}
                   </div>
                 </div>

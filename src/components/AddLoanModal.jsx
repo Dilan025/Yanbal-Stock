@@ -11,6 +11,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
   const [personName, setPersonName] = useState('');
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [dueDate, setDueDate] = useState('');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   
@@ -25,6 +26,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
       setPersonName('');
       setProductId('');
       setQuantity(1);
+      setDueDate('');
       setNotes('');
     }
   }, [isOpen]);
@@ -75,6 +77,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
         productImage: selectedProduct.imageUrl || '',
         quantity: parseInt(quantity),
         notes,
+        dueDate: dueDate ? new Date(`${dueDate}T23:59:59`) : null,
         status: 'Pendiente',
         dateLent: serverTimestamp(),
       });
@@ -168,6 +171,18 @@ export default function AddLoanModal({ isOpen, onClose }) {
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   required
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Fecha límite de devolución (Opcional)
+                </label>
+                <input
+                  type="date"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
                 />
               </div>
 

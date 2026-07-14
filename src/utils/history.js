@@ -8,9 +8,9 @@ export const logHistory = async (userId, {
   quantity = 1,
   details = ''
 }) => {
-  if (!userId) return;
+  if (!userId) return null;
   try {
-    await addDoc(collection(db, 'users', userId, 'history'), {
+    const docRef = await addDoc(collection(db, 'users', userId, 'history'), {
       action,
       productId: productId || '',
       productName: productName || 'Producto Desconocido',
@@ -18,7 +18,9 @@ export const logHistory = async (userId, {
       details,
       timestamp: serverTimestamp()
     });
+    return docRef;
   } catch (error) {
-    console.error("Error guardando en el historial:", error);
+    console.error("Error logging history:", error);
+    return null;
   }
 };

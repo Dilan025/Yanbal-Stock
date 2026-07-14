@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Loans from './pages/Loans';
 import History from './pages/History';
 import Login from './pages/Login';
+import Landing from './pages/Landing';
 import AddProductModal from './components/AddProductModal';
 import ReloadPrompt from './components/ReloadPrompt';
 import Catalog from './pages/Catalog';
@@ -107,6 +108,8 @@ function ThemeToggle() {
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [accountName, setAccountName] = useState("Cargando...");
+  const [showLogin, setShowLogin] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
   const { currentUser } = useAuth();
   const location = useLocation();
 
@@ -136,7 +139,13 @@ function App() {
   };
 
   if (!currentUser) {
-    return <Login />;
+    if (showLogin) {
+      return <Login initialIsRegistering={isRegistering} onBack={() => setShowLogin(false)} />;
+    }
+    return <Landing 
+      onLoginClick={() => { setIsRegistering(false); setShowLogin(true); }}
+      onRegisterClick={() => { setIsRegistering(true); setShowLogin(true); }}
+    />;
   }
 
   return (

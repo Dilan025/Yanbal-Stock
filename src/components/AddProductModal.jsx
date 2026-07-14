@@ -18,6 +18,7 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
   const [barcode, setBarcode] = useState('');
   const [campaign, setCampaign] = useState('');
   const [variant, setVariant] = useState('');
+  const [minStockAlert, setMinStockAlert] = useState(2);
   const [imageBase64, setImageBase64] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -80,6 +81,7 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
         setBarcode(productToEdit.barcode || '');
         setCampaign(productToEdit.campaign || '');
         setVariant(productToEdit.variant || '');
+        setMinStockAlert(productToEdit.minStockAlert !== undefined ? productToEdit.minStockAlert : 2);
         setImageBase64(productToEdit.imageUrl || '');
       } else {
         setName('');
@@ -89,6 +91,7 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
         setBarcode(initialBarcode);
         setCampaign('');
         setVariant('');
+        setMinStockAlert(2);
         setImageBase64('');
       }
     }
@@ -233,6 +236,7 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
         barcode,
         campaign,
         variant,
+        minStockAlert: parseInt(minStockAlert, 10) || 2,
         imageUrl: imageBase64,
       };
 
@@ -474,6 +478,20 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
                     placeholder="Ej. C07"
                     value={campaign}
                     onChange={(e) => setCampaign(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-1 flex flex-col">
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Avisar stock bajo en:</label>
+                  <input
+                    type="number"
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    min="0"
+                    value={minStockAlert}
+                    onChange={(e) => setMinStockAlert(e.target.value)}
+                    placeholder="Ej. 2"
                   />
                 </div>
               </div>

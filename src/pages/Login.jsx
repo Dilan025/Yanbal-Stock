@@ -4,9 +4,10 @@ import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
+import { ChevronLeft } from 'lucide-react';
 
-export default function Login() {
-  const [isLogin, setIsLogin] = useState(true);
+export default function Login({ initialIsRegistering = false, onBack }) {
+  const [isLogin, setIsLogin] = useState(!initialIsRegistering);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
@@ -75,8 +76,17 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-black p-4 transition-colors">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-8 w-full max-w-md text-center transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+      {onBack && (
+        <button 
+          onClick={onBack}
+          className="absolute top-6 left-6 flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors"
+        >
+          <ChevronLeft size={20} />
+          Volver
+        </button>
+      )}
+      <div className="sm:mx-auto sm:w-full sm:max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-8 w-full max-w-md text-center transition-colors">
         <div className="bg-orange-100 dark:bg-orange-900/50 text-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
           <Lock size={32} />
         </div>
