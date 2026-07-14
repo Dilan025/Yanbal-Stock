@@ -212,14 +212,16 @@ export default function Dashboard() {
             title="Filtrar Stock Bajo"
           >
             <AlertTriangle size={20} />
+            <span className="text-sm font-bold">Alertas</span>
           </button>
 
           <button 
             onClick={handleExportWhatsApp}
-            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
+            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors flex items-center gap-2"
             title="Compartir por WhatsApp"
           >
             <MessageCircle size={20} />
+            <span className="text-sm font-bold">Compartir</span>
           </button>
           
           <button 
@@ -228,7 +230,7 @@ export default function Dashboard() {
             title="Escáner Rápido"
           >
             <Camera size={20} />
-            <span className="text-sm font-bold hidden sm:inline">Escáner</span>
+            <span className="text-sm font-bold">Escáner</span>
           </button>
 
           <button 
@@ -237,10 +239,11 @@ export default function Dashboard() {
               navigator.clipboard.writeText(url);
               toast.success('Enlace de catálogo copiado');
             }}
-            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-2"
             title="Copiar enlace del Catálogo Público"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span className="text-sm font-bold">Enlace</span>
           </button>
 
           <button 
@@ -248,10 +251,11 @@ export default function Dashboard() {
               exportToCSV(products);
               toast.success('Excel descargado');
             }}
-            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-2"
             title="Exportar a Excel"
           >
             <Download size={20} />
+            <span className="text-sm font-bold">Excel</span>
           </button>
         </div>
       </div>
