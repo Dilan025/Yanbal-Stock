@@ -46,7 +46,7 @@ export default function Landing({ onLoginClick, onRegisterClick }) {
             Gestiona tu inventario con <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">inteligencia</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Escanea códigos de barras, controla tus préstamos, mantén tu stock al día y comparte tu catálogo virtual con clientes en segundos. Todo desde tu celular o computadora.
+            Escanea códigos de barras, controla tus intercambios y prestaciones, mantén tu stock al día y comparte tu catálogo virtual con clientes en segundos. Todo desde tu celular o computadora.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -91,8 +91,8 @@ export default function Landing({ onLoginClick, onRegisterClick }) {
             />
             <FeatureCard 
               icon={<Shield size={32} />}
-              title="Control de Préstamos"
-              desc="Lleva un registro de qué producto le prestaste a quién, con alertas de fecha de vencimiento para que nunca pierdas mercadería."
+              title="Intercambios y Prestaciones"
+              desc="Lleva un registro de qué producto prestaste o intercambiaste, con alertas de fecha de vencimiento para que nunca pierdas mercadería."
               color="text-blue-500"
               bg="bg-blue-100 dark:bg-blue-900/30"
             />

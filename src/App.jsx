@@ -59,7 +59,7 @@ function Navigation({ uid }) {
         className={`flex flex-col items-center p-2 rounded-lg transition-colors ${location.pathname === '/loans' ? 'text-orange-500' : 'text-slate-500 dark:text-slate-400'}`}
       >
         <Repeat size={24} />
-        <span className="text-[10px] font-medium mt-1">Préstamos</span>
+        <span className="text-[10px] font-medium mt-1">Intercambios</span>
       </Link>
       <Link 
         to="/clients" 
@@ -189,7 +189,7 @@ function App() {
               className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/loans' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
               <Repeat size={18} />
-              <span className="text-sm lg:text-base">Préstamos</span>
+              <span className="text-sm lg:text-base">Intercambios y Prestaciones</span>
             </Link>
             <Link 
               to="/clients" 
