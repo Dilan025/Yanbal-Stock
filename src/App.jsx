@@ -189,7 +189,7 @@ function App() {
               className={`flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${location.pathname === '/loans' ? 'bg-slate-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
             >
               <Repeat size={18} />
-              <span className="text-sm lg:text-base">Intercambios y Prestaciones</span>
+              <span className="text-sm lg:text-base">Intercambios</span>
             </Link>
             <Link 
               to="/clients" 

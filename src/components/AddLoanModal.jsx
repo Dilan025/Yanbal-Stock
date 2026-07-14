@@ -96,12 +96,12 @@ export default function AddLoanModal({ isOpen, onClose }) {
         details: `Prestado a: ${personName}`
       });
 
-      toast.success('Intercambio/Prestación registrado correctamente');
+      toast.success('Intercambio registrado correctamente');
       setLoading(false);
       onClose();
     } catch (error) {
       console.error('Error al registrar préstamo:', error);
-      toast.error('Hubo un error al registrar el intercambio/prestación.');
+      toast.error('Hubo un error al registrar el intercambio.');
       setLoading(false);
     }
   };
@@ -120,7 +120,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Nuevo Intercambio o Prestación</h2>
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Nuevo Intercambio</h2>
               <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full p-2 transition-colors">
                 <X size={20} />
               </button>
@@ -129,7 +129,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  ¿A quién le prestas o intercambias?
+                  ¿Con quién haces el intercambio?
                 </label>
                 <input
                   type="text"
@@ -143,7 +143,7 @@ export default function AddLoanModal({ isOpen, onClose }) {
 
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  ¿Qué producto prestas o intercambias?
+                  ¿Qué producto intercambias?
                 </label>
                 <select
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm"

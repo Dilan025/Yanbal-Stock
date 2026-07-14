@@ -27,7 +27,7 @@ export default function Loans() {
       setLoading(false);
     }, (error) => {
       console.error("Error al cargar préstamos:", error);
-      toast.error('Error al cargar intercambios/prestaciones');
+      toast.error('Error al cargar intercambios');
       setLoading(false);
     });
 
@@ -73,7 +73,7 @@ export default function Loans() {
                   details: 'Devolución de producto prestado'
                 });
                 
-                toast.success('Intercambio/Prestación devuelta al stock', { icon: '📦' });
+                toast.success('Intercambio devuelto al stock', { icon: '📦' });
               } catch (error) {
                 toast.error("Hubo un error al procesar la devolución.");
               }
@@ -144,14 +144,14 @@ export default function Loans() {
       className="max-w-4xl mx-auto transition-colors"
     >
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Intercambios y Prestaciones</h2>
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-white m-0">Intercambios</h2>
         <motion.button 
           whileTap={{ scale: 0.95 }}
           className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full font-medium transition-colors shadow-sm"
           onClick={() => setIsModalOpen(true)}
         >
           <ArrowRightLeft size={20} />
-          <span className="hidden sm:inline">Nuevo Intercambio/Prestación</span>
+          <span className="hidden sm:inline">Nuevo Intercambio</span>
         </motion.button>
       </div>
 
@@ -166,7 +166,7 @@ export default function Loans() {
           className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-center"
         >
           <ArrowRightLeft size={64} className="text-slate-300 dark:text-slate-600 mb-4" />
-          <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">No hay intercambios ni prestaciones activas</h3>
+          <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">No hay intercambios activos</h3>
           <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
             Aquí podrás llevar el control de los productos que le prestes a otras consultoras o los intercambios que realices.
           </p>
