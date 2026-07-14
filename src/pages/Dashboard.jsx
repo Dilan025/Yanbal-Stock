@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle } from 'lucide-react';
+import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle, Camera } from 'lucide-react';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
