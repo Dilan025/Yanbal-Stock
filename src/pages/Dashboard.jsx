@@ -356,7 +356,7 @@ export default function Dashboard() {
         </motion.div>
       ) : (
         <>
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             <AnimatePresence>
               {visibleProducts.map((product) => {
                 const isLowStock = product.stock > 0 && product.stock <= 2;
@@ -387,56 +387,56 @@ export default function Dashboard() {
                   </button>
                   {product.imageUrl ? (
                     <div 
-                      className="h-36 bg-contain bg-no-repeat bg-center cursor-pointer mt-4" 
+                      className="h-28 md:h-36 bg-contain bg-no-repeat bg-center cursor-pointer mt-4" 
                       onClick={() => setSelectedProduct(product)}
                       style={{ backgroundImage: `url(${product.imageUrl})` }}
                     />
                   ) : (
-                    <div className="h-36 mt-4 bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-300 dark:text-slate-500 cursor-pointer" onClick={() => setSelectedProduct(product)}>
-                      <Package size={48} />
+                    <div className="h-28 md:h-36 mt-4 bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-300 dark:text-slate-500 cursor-pointer" onClick={() => setSelectedProduct(product)}>
+                      <Package size={40} className="md:w-12 md:h-12" />
                     </div>
                   )}
                   
-                  <div className="p-4 flex-1 cursor-pointer" onClick={() => setSelectedProduct(product)}>
-                    <div className="flex justify-between items-start mb-2">
-                      <span className={`px-2 py-1 text-xs font-bold rounded-full ${product.stock > 0 ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400'}`}>
+                  <div className="p-3 md:p-4 flex-1 cursor-pointer flex flex-col" onClick={() => setSelectedProduct(product)}>
+                    <div className="flex justify-between items-start mb-2 gap-1">
+                      <span className={`px-1.5 py-0.5 md:px-2 md:py-1 text-[9px] md:text-xs font-bold rounded-full truncate ${product.stock > 0 ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400'}`}>
                         {product.category}
                       </span>
                       {product.price > 0 && (
-                        <span className="font-bold text-slate-700 dark:text-slate-300">
+                        <span className="font-bold text-xs md:text-sm text-slate-700 dark:text-slate-300 whitespace-nowrap">
                           S/ {product.price.toFixed(2)}
                         </span>
                       )}
                     </div>
-                    <h3 className="font-bold text-slate-800 dark:text-white text-lg mb-1 leading-tight">{product.name}</h3>
+                    <h3 className="font-bold text-slate-800 dark:text-white text-sm md:text-lg mb-1 leading-tight flex-1">{product.name}</h3>
                     {product.variant && (
-                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
+                      <p className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mb-1 truncate">
                         Tono: {product.variant}
                       </p>
                     )}
-                    <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-2">
-                      Stock: <strong className={`text-xl ${product.stock === 0 ? 'text-red-500' : isLowStock ? 'text-amber-500' : 'text-slate-700 dark:text-slate-200'}`}>{product.stock}</strong>
+                    <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-2">
+                      Stock: <strong className={`text-base md:text-xl ${product.stock === 0 ? 'text-red-500' : isLowStock ? 'text-amber-500' : 'text-slate-700 dark:text-slate-200'}`}>{product.stock}</strong>
                     </p>
                   </div>
                   
-                  <div className="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between transition-colors">
+                  <div className="px-2 md:px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between transition-colors">
                     <motion.button 
                       whileTap={{ scale: 0.9 }}
-                      className="w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 disabled:opacity-50 transition-colors"
+                      className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 disabled:opacity-50 transition-colors"
                       onClick={() => handleUpdateStock(product.id, product.stock, -1, product.name)}
                       disabled={product.stock === 0}
                     >
-                      <Minus size={16} />
+                      <Minus size={14} className="md:w-4 md:h-4" />
                     </motion.button>
                     
-                    <span className="font-bold text-lg text-slate-700 dark:text-white">{product.stock}</span>
+                    <span className="font-bold text-base md:text-lg text-slate-700 dark:text-white">{product.stock}</span>
                     
                     <motion.button 
                       whileTap={{ scale: 0.9 }}
-                      className="w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors"
+                      className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors"
                       onClick={() => handleUpdateStock(product.id, product.stock, 1, product.name)}
                     >
-                      <Plus size={16} />
+                      <Plus size={14} className="md:w-4 md:h-4" />
                     </motion.button>
                   </div>
                 </motion.div>
