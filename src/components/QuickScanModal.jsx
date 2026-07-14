@@ -16,6 +16,8 @@ export default function QuickScanModal({
   const [matchedProduct, setMatchedProduct] = useState(null);
   const [quantityToAdd, setQuantityToAdd] = useState(1);
   const scannerRef = useRef(null);
+  
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   useEffect(() => {
     let html5QrCode;
@@ -115,29 +117,32 @@ export default function QuickScanModal({
           <div className="p-4 flex-1 overflow-y-auto">
             {!matchedProduct ? (
               <div className="flex flex-col gap-4">
-                <div className="bg-slate-100 dark:bg-slate-900 rounded-xl overflow-hidden aspect-video relative flex items-center justify-center border border-slate-200 dark:border-slate-700">
-                  {isScanning ? (
-                    <div id="quick-reader" className="w-full h-full bg-black object-cover"></div>
-                  ) : (
-                    <div className="text-center p-6 flex flex-col items-center">
-                      <Camera size={48} className="text-slate-300 dark:text-slate-600 mb-2" />
-                      <p className="text-sm text-slate-500">Cámara pausada o no soportada</p>
-                      <button 
-                        onClick={() => setIsScanning(true)}
-                        className="mt-4 px-4 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-bold rounded-lg text-sm"
-                      >
-                        Intentar Cámara
-                      </button>
+                {isMobile && (
+                  <>
+                    <div className="bg-slate-100 dark:bg-slate-900 rounded-xl overflow-hidden aspect-video relative flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                      {isScanning ? (
+                        <div id="quick-reader" className="w-full h-full bg-black object-cover"></div>
+                      ) : (
+                        <div className="text-center p-6 flex flex-col items-center">
+                          <Camera size={48} className="text-slate-300 dark:text-slate-600 mb-2" />
+                          <p className="text-sm text-slate-500">Cámara pausada o no soportada</p>
+                          <button 
+                            onClick={() => setIsScanning(true)}
+                            className="mt-4 px-4 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-bold rounded-lg text-sm"
+                          >
+                            Intentar Cámara
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                    <div className="flex items-center gap-2">
+                      <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
+                      <span className="text-xs font-bold text-slate-400 uppercase">O escribe el código</span>
+                      <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
+                    </div>
+                  </>
+                )}
                 
-                <div className="flex items-center gap-2">
-                  <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
-                  <span className="text-xs font-bold text-slate-400 uppercase">O escribe el código</span>
-                  <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
-                </div>
-
                 <form 
                   onSubmit={(e) => {
                     e.preventDefault();

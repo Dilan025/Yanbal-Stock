@@ -27,6 +27,8 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
   const [flashOn, setFlashOn] = useState(false);
   const scannerRef = useRef(null);
   const { currentUser } = useAuth();
+  
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   useEffect(() => {
     if (isOpen && currentUser) {
@@ -440,14 +442,16 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null,
                       value={barcode}
                       onChange={(e) => setBarcode(e.target.value)}
                     />
-                    <button 
-                      type="button" 
-                      onClick={() => setIsScanning(!isScanning)}
-                      className="p-2.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                      title="Escanear Código"
-                    >
-                      <ScanLine size={20} />
-                    </button>
+                    {isMobile && (
+                      <button 
+                        type="button" 
+                        onClick={() => setIsScanning(!isScanning)}
+                        className="p-2.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                        title="Escanear Código"
+                      >
+                        <ScanLine size={20} />
+                      </button>
+                    )}
                   </div>
                 </div>
 
