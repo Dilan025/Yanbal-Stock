@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle, Camera } from 'lucide-react';
+import { Search, Plus, Minus, Package, Loader2, Trash2, Download, MessageCircle, AlertTriangle, Camera, ExternalLink } from 'lucide-react';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -219,14 +219,13 @@ export default function Dashboard() {
           <button 
             onClick={() => {
               const url = `${window.location.origin}/catalog/${currentUser?.uid}`;
-              navigator.clipboard.writeText(url);
-              toast.success('Enlace de catálogo copiado');
+              window.open(url, '_blank');
             }}
             className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-2"
-            title="Copiar enlace del Catálogo Público"
+            title="Ver Catálogo Público"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-            <span className="text-sm font-bold">Enlace</span>
+            <ExternalLink size={20} />
+            <span className="text-sm font-bold">Ver Catálogo</span>
           </button>
 
           <button 
