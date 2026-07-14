@@ -129,27 +129,10 @@ export default function Dashboard() {
   };
 
   const handleExportWhatsApp = () => {
-    let text = "*Inventario Yanbal*\n\n";
-    const categories = {};
-    filteredProducts.forEach(p => {
-      if (!categories[p.category]) categories[p.category] = [];
-      categories[p.category].push(p);
-    });
-
-    Object.keys(categories).forEach(cat => {
-      text += `*${cat}*\n`;
-      categories[cat].forEach(p => {
-        text += `- ${p.name}: ${p.stock} unid.`;
-        if (p.price > 0) text += ` (S/ ${p.price})`;
-        text += `\n`;
-      });
-      text += `\n`;
-    });
-
-    text += `*Total Productos:* ${filteredProducts.length}\n`;
-    text += `*Valor Estimado:* S/ ${totalValue.toFixed(2)}\n`;
-
-    const encodedText = encodeURIComponent(text);
+    const url = `${window.location.origin}/catalog/${currentUser?.uid}`;
+    const message = `¡Hola! Aquí tienes el enlace a mi catálogo virtual de productos disponibles:\n\n${url}`;
+    
+    const encodedText = encodeURIComponent(message);
     window.open(`https://wa.me/?text=${encodedText}`, '_blank');
   };
 
