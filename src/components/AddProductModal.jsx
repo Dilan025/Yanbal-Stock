@@ -10,7 +10,7 @@ import imageCompression from 'browser-image-compression';
 import { toast } from 'react-hot-toast';
 import { Html5Qrcode } from 'html5-qrcode';
 
-export default function AddProductModal({ isOpen, onClose, productToEdit = null }) {
+export default function AddProductModal({ isOpen, onClose, productToEdit = null, initialBarcode = '' }) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Maquillaje');
   const [stock, setStock] = useState(1);
@@ -84,13 +84,13 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
         setCategory('Maquillaje');
         setStock(1);
         setPrice('');
-        setBarcode('');
+        setBarcode(initialBarcode);
         setCampaign('');
         setVariant('');
         setImageBase64('');
       }
     }
-  }, [isOpen, productToEdit]);
+  }, [isOpen, productToEdit, initialBarcode]);
 
   useEffect(() => {
     if (name.trim() === '' || productToEdit) {
@@ -117,6 +117,22 @@ export default function AddProductModal({ isOpen, onClose, productToEdit = null 
     );
     setSuggestions(filtered);
   }, [name, productToEdit, userCatalog]);
+
+  // Autocompletar por código de barras
+  useEffect(() => {
+    if (barcode.trim().length > 3 && !productToEdit) {
+      const combined = [...userCatalog, ...catalog];
+      const match = combined.find(p => p.barcode && p.barcode.toString() === barcode.trim());
+      
+      if (match && match.name !== name) {
+        setName(match.name);
+        if (match.category) setCategory(match.category);
+        if (match.imageUrl && !imageBase64) setImageBase64(match.imageUrl);
+        if (match.price && !price) setPrice(match.price);
+        toast.success("¡Producto autocompletado!");
+      }
+    }
+  }, [barcode]);
 
   useEffect(() => {
     let html5QrCode;

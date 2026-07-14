@@ -12,6 +12,7 @@ import { toast } from 'react-hot-toast';
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
+import QuickScanModal from '../components/QuickScanModal';
 
 const COLORS = ['#FF5E00', '#10B981', '#3B82F6', '#F59E0B', '#8B5CF6', '#EC4899', '#14B8A6', '#F43F5E'];
 
@@ -25,6 +26,9 @@ export default function Dashboard() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [visibleCount, setVisibleCount] = useState(20);
+  const [isQuickScanOpen, setIsQuickScanOpen] = useState(false);
+  const [quickAddBarcode, setQuickAddBarcode] = useState('');
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -216,6 +220,15 @@ export default function Dashboard() {
             title="Compartir por WhatsApp"
           >
             <MessageCircle size={20} />
+          </button>
+          
+          <button 
+            onClick={() => setIsQuickScanOpen(true)}
+            className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors flex items-center gap-2"
+            title="Escáner Rápido"
+          >
+            <Camera size={20} />
+            <span className="text-sm font-bold hidden sm:inline">Escáner</span>
           </button>
 
           <button 
@@ -469,6 +482,26 @@ export default function Dashboard() {
         isOpen={!!editingProduct} 
         onClose={() => setEditingProduct(null)} 
         productToEdit={editingProduct} 
+      />
+
+      <QuickScanModal
+        isOpen={isQuickScanOpen}
+        onClose={() => setIsQuickScanOpen(false)}
+        products={products}
+        onUpdateStock={handleUpdateStock}
+        onProductNotFound={(barcode) => {
+          setQuickAddBarcode(barcode);
+          setIsQuickAddOpen(true);
+        }}
+      />
+      
+      <AddProductModal 
+        isOpen={isQuickAddOpen}
+        onClose={() => {
+          setIsQuickAddOpen(false);
+          setQuickAddBarcode('');
+        }}
+        initialBarcode={quickAddBarcode}
       />
     </motion.div>
   );
