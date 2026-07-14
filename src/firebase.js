@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, enableMultiTabIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAgNPUr-yRtR3r8qu9ipnG3809tU_b9mLI",
@@ -15,6 +16,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase App Check with reCAPTCHA v3
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider('6LdiWFItAAAAAJ3fRZ5j9LRjn0_PksxzqXNwESWE'),
+  isTokenAutoRefreshEnabled: true
+});
 
 // Initialize Cloud Firestore and Cloud Storage and Auth
 export const db = getFirestore(app);
